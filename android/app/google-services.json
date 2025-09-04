@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "980957773680",
+    "project_id": "tala-eskwela",
+    "storage_bucket": "tala-eskwela.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980957773680:android:fb2764f2318f1a0a8a99b5",
+        "android_client_info": {
+          "package_name": "com.joshua129.TalaEskwela"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYc5FobO0CjSn7zgBh17sccBfCQpuBFBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
