@@ -1,11 +1,29 @@
+import { BlurView } from "expo-blur";
+import { Image, ImageBackground } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { useEffect } from "react";
-import { Text, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Icons } from "../constants/icons/icons.constant";
+import { Images } from "../constants/images/image.constants";
 import { Roles } from "../enums/role.enum";
+import { usePushNotifications } from "../hooks/usePushNotification";
 import { useAuthStore } from "../stores/auth.store";
 export default function Index() {
-  const { user, logout } = useAuthStore();
+  const { expoPushToken } = usePushNotifications();
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassord] = useState<string>("");
+
+  const { user, login, loading } = useAuthStore();
 
   useEffect(() => {
     if (user) {
@@ -25,29 +43,106 @@ export default function Index() {
     }
   }, [user]); // 👈 Add `user` to the dependency array
 
+  const handleLogin = () => {
+    if (!email || !password) return;
+
+    login(email, password, expoPushToken?.data);
+  };
+
   return (
-    <SafeAreaView className="flex-1 items-center justify-center bg-white gap-10">
-      <Text>Welcome !!!!</Text>
+    <ImageBackground
+      source={Images.welcome_bg}
+      contentFit="cover"
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "flex-end",
+        padding: 10,
+      }}
+    >
+      <View className="flex h-[60%] items-center justify-center flex-1">
+        <Image source={Icons.app_logo} style={{ height: 200, width: 200 }} />
+      </View>
 
-      <TouchableOpacity
-        onPress={() => {
-          router.replace("/(onboarding)/login");
-        }}
+      <KeyboardAvoidingView
+        className="h-[50%] w-full justify-end"
+        behavior={Platform.OS === "ios" ? "padding" : "position"}
+        keyboardVerticalOffset={0}
       >
-        <Text>Login</Text>
-      </TouchableOpacity>
+        <BlurView
+          intensity={70}
+          tint="systemMaterialDark"
+          className="size-full rounded-2xl overflow-hidden justify-start items-center p-10 gap-8"
+        >
+          <View className="items-center justify-center w-full">
+            <Text className="font-bold text-cyan-300 text-3xl mb-4">Login</Text>
 
-      <TouchableOpacity
-        onPress={() => {
-          router.replace("/(onboarding)/register");
-        }}
-      >
-        <Text>Register</Text>
-      </TouchableOpacity>
+            <View className="w-full items-start justify-center gap-2">
+              <Text className="text-primary-400 text-l">Email</Text>
 
-      <TouchableOpacity onPress={logout}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+              <View className="w-full items-start justify-center border border-cyan-200 rounded-lg px-4">
+                <TextInput
+                  className="w-full text-primary-400"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.nativeEvent.text);
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View className="w-full items-start justify-center gap-2">
+            <Text className="text-primary-400 text-l">Password</Text>
+
+            <View className="w-full items-start justify-center border border-cyan-200 rounded-lg px-4">
+              <TextInput
+                className="w-full text-primary-400"
+                value={password}
+                onChange={(e) => {
+                  setPassord(e.nativeEvent.text);
+                }}
+                secureTextEntry
+              />
+            </View>
+          </View>
+
+          <View
+            className="items-center justify-center w-full gap-2"
+            style={{ display: "flex", flexDirection: "row" }}
+          >
+            <Text className="text-primary-400">No account yet?</Text>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/(onboarding)/register");
+              }}
+            >
+              <Text className="text-cyan-300">Register here</Text>
+            </TouchableOpacity>
+          </View>
+
+          {loading ? (
+            <ActivityIndicator size={"small"} />
+          ) : (
+            <TouchableOpacity
+              className="w-full h-14 rounded-lg"
+              onPress={handleLogin}
+            >
+              <LinearGradient
+                colors={["#fb923c", "#22d3ee", "#fb923c", "#22d3ee"]}
+                start={{ x: -1, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                className="w-full h-full items-center justify-center rounded-lg overflow-hidden"
+                style={{ borderRadius: 10 }}
+              >
+                <Text className="text-primary-400 font-semibold text-lg">
+                  Submit
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+        </BlurView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 }

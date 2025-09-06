@@ -9,7 +9,11 @@ import { Teacher } from "../interfaces/teacher.interface";
 interface AuthStoreState {
   loading: boolean;
   user: Student | Teacher | Parent | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (
+    email: string,
+    password: string,
+    push_token?: string
+  ) => Promise<void>;
   register: (role: Roles, form: Student | Teacher | Parent) => void;
   logout: () => void;
 }
@@ -17,19 +21,19 @@ interface AuthStoreState {
 export const useAuthStore = create<AuthStoreState>((set) => ({
   loading: false,
   user: null,
-  login: async (email, password) => {
+  login: async (email, password, push_token) => {
     try {
+      set({ loading: true });
       const res = await fetch(`${BASE_URL}auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, push_token }),
       });
 
       const data = await res.json();
       console.log(data);
-
       if (data) {
         await AsyncStorage.setItem("accessToken", data.access_token);
         set({ user: data.user });
@@ -38,6 +42,8 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
   register: async (role, form) => {

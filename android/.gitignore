@@ -4,7 +4,6 @@
 
 # Android/IntelliJ
 #
-google-services
 build/
 .idea
 .gradle

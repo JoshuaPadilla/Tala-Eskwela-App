@@ -6,6 +6,7 @@ import { useEffect } from "react";
 export default function OnboardingLayout() {
   const { user } = useAuthStore();
 
+  // ✅ Only run role-based redirect if no notification override
   useEffect(() => {
     if (user) {
       switch (user.role) {
@@ -23,12 +24,10 @@ export default function OnboardingLayout() {
       }
     }
   }, [user]);
+
   return (
-    <>
-      <Stack>
-        <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="register" options={{ headerShown: false }} />
-      </Stack>
-    </>
+    <Stack>
+      <Stack.Screen name="register" options={{ headerShown: false }} />
+    </Stack>
   );
 }
