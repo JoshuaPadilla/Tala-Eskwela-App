@@ -48,7 +48,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
   },
   register: async (role, form) => {
     try {
-      console.log("Fetching ...");
+      set({ loading: true });
 
       const res = await fetch(`${BASE_URL}auth/register`, {
         method: "POST",
@@ -60,8 +60,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 
       const data = await res.json();
 
-      console.log(data);
-
+      console.log("Data!:", data);
       if (data) {
         await AsyncStorage.setItem("accessToken", data.data.access_token);
         set({ user: data.data.user });
@@ -70,6 +69,8 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 

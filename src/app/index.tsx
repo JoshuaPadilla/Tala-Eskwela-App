@@ -38,7 +38,7 @@ export default function Index() {
           router.replace("/(auth_screens)/(student)/student_home");
           break;
         default:
-          router.replace("/(onboarding)/login");
+          router.replace("/");
       }
     }
   }, [user]); // 👈 Add `user` to the dependency array
