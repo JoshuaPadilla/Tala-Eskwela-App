@@ -4,6 +4,8 @@ export default function TeacherLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="teacher_home" options={{ headerShown: false }} />
+      <Stack.Screen name="selected_student" options={{ headerShown: false }} />
+      <Stack.Screen name="register-student" options={{ headerShown: false }} />
     </Stack>
   );
 }

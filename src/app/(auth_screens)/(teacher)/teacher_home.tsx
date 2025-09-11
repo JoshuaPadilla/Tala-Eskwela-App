@@ -1,14 +1,45 @@
 import { useAuthStore } from "@/src/stores/auth.store";
+import { useStudentStore } from "@/src/stores/student.store";
+import { router } from "expo-router";
 import React from "react";
-import { Text } from "react-native";
+import { ScrollView, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherHome = () => {
   const { user } = useAuthStore();
+  const { students, getStudents, getStudent, selectedStudent } =
+    useStudentStore();
+
+  const handleSelecStudent = (student_id: string) => {
+    getStudent(student_id);
+    router.replace("/(auth_screens)/(teacher)/selected_student");
+  };
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-white gap-10">
       <Text>Hello {user?.first_name}</Text>
+      <Text>students</Text>
+
+      <TouchableOpacity
+        onPress={getStudents}
+        className="bg-primary-300 rounded-md p-4"
+      >
+        <Text>Get students</Text>
+      </TouchableOpacity>
+
+      <ScrollView contentContainerClassName="pb[100px] gap-2">
+        {students.map((student) => (
+          <TouchableOpacity
+            key={student.id}
+            className="bg-purple-100 px-4 py-2 rounded-md"
+            onPress={() => handleSelecStudent(student.id || "")}
+          >
+            <Text>
+              {student.first_name} {student.last_name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };

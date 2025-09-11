@@ -2,6 +2,7 @@ import RegistrationForm from "@/src/components/registration-form";
 import RoleSelectionForm from "@/src/components/role-selection";
 import { Images } from "@/src/constants/images/image.constants";
 import { Roles } from "@/src/enums/role.enum";
+import { usePushNotifications } from "@/src/hooks/usePushNotification";
 import { Parent } from "@/src/interfaces/parent.interface";
 import { RegistrationFormInterface } from "@/src/interfaces/registration-form.interface";
 import { Student } from "@/src/interfaces/student.interface";
@@ -10,18 +11,9 @@ import { useAuthStore } from "@/src/stores/auth.store";
 import { ImageBackground } from "expo-image";
 import React, { useState } from "react";
 
-const parent: Parent = {
-  first_name: "Joshua",
-  last_name: "Vincent",
-  middle_name: "Padilla",
-  email: "sample20@email.com",
-  password: "12345678",
-  phone: "09123456789",
-  role: Roles.PARENT,
-};
-
 const Register = () => {
   const { register, loading } = useAuthStore();
+  const { expoPushToken } = usePushNotifications();
 
   const [role, setRole] = useState<Roles | null>(null);
   const [registrationData, setRegistrationData] =
@@ -39,6 +31,10 @@ const Register = () => {
 
   const handleSelecRole = (role: Roles) => {
     setRole(role);
+    setRegistrationData((prev: RegistrationFormInterface) => ({
+      ...prev,
+      push_token: expoPushToken?.data,
+    }));
 
     setRoleSelected(true);
   };

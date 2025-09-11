@@ -1,24 +1,33 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useEffect } from "react";
-import { usePushNotifications } from "../hooks/usePushNotification";
 import "./globals.css";
 
-import * as Notifications from "expo-notifications";
+import { Roles } from "../enums/role.enum";
+import { useAuthStore } from "../stores/auth.store";
 
 export default function RootLayout() {
-  const { expoPushToken, notification } = usePushNotifications();
+  const { checkAuth, user } = useAuthStore();
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   useEffect(() => {
-    const handleLaunchNotification = async () => {
-      const response = await Notifications.getLastNotificationResponseAsync();
-      if (response) {
-        const data = response.notification.request.content.data;
-        console.log(data);
+    if (user) {
+      switch (user.role) {
+        case Roles.PARENT:
+          router.replace("/(auth_screens)/(parent)/parent_home");
+          break;
+        case Roles.TEACHER:
+          router.replace("/(auth_screens)/(teacher)/teacher_home");
+          break;
+        case Roles.STUDENT:
+          router.replace("/(auth_screens)/(student)/student_home");
+          break;
+        default:
+          router.replace("/");
       }
-    };
-
-    handleLaunchNotification();
-  }, []);
+    }
+  }, [user]); // 👈 Add `user` to the dependency array
   return (
     <>
       <Stack screenOptions={{ headerShown: false }}>

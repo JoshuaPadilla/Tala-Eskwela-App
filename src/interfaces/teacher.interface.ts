@@ -4,6 +4,7 @@ import { Student } from "./student.interface";
 
 export interface Teacher {
   id?: string;
+  push_token?: string;
   first_name: string;
   last_name: string;
   middle_name: string;
