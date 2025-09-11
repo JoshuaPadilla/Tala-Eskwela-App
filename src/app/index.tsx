@@ -46,7 +46,9 @@ export default function Index() {
       </View>
 
       {isChecking ? (
-        <ActivityIndicator size={"large"} />
+        <View className="h-[40%]">
+          <ActivityIndicator size={"large"} />
+        </View>
       ) : (
         <KeyboardAvoidingView
           className="h-[50%] w-full justify-end"

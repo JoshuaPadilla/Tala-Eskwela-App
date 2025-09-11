@@ -35,8 +35,11 @@ const TeacherHome = () => {
             onPress={() => handleSelecStudent(student.id || "")}
           >
             <Text>
-              {student.first_name} {student.last_name}
+              {student.first_name} {student.last_name}{" "}
+              {student.rfid_tag_uid || "Not yet Registered"}
             </Text>
+
+            <Text>{student.push_token}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>

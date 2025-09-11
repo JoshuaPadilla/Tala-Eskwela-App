@@ -1,4 +1,3 @@
-import { useChangeMode } from "@/src/stores/change-mode.store";
 import { useStudentStore } from "@/src/stores/student.store";
 import { router } from "expo-router";
 import React from "react";
@@ -6,11 +5,10 @@ import { Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SelectedStudent = () => {
-  const { selectedStudent } = useStudentStore();
-  const { changeMode } = useChangeMode();
+  const { selectedStudent, setStudentToRegister } = useStudentStore();
 
   const handleRegister = () => {
-    changeMode();
+    setStudentToRegister(selectedStudent?.id || "");
 
     router.push("/(auth_screens)/(teacher)/register-student");
   };

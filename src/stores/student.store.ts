@@ -9,6 +9,8 @@ interface StudentStoreState {
   students: Student[];
   getStudents: () => void;
   getStudent: (student_id: string) => void;
+  setStudentToRegister: (student_id: string) => void;
+  updateStudents: (data: Partial<Student>) => void;
 }
 
 export const useStudentStore = create<StudentStoreState>((set) => ({
@@ -62,5 +64,32 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+  setStudentToRegister: async (student_id) => {
+    try {
+      set({ loading: true });
+      await fetch(`${BASE_URL}students/setStudentToRegister`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: student_id }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  updateStudents: (data) => {
+    console.log(data);
+    set((state) => {
+      const updatedStudents = state.students.map((student) =>
+        student.id === state.selectedStudent?.id
+          ? { ...student, ...data }
+          : student
+      );
+      return {
+        students: updatedStudents,
+      };
+    });
   },
 }));
