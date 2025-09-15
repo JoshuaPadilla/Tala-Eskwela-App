@@ -80,7 +80,6 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
     }
   },
   updateStudents: (data) => {
-    console.log(data);
     set((state) => {
       const updatedStudents = state.students.map((student) =>
         student.id === state.selectedStudent?.id

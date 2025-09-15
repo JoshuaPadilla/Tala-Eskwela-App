@@ -25,6 +25,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
   isChecking: false,
   user: null,
   login: async (email, password, push_token) => {
+    console.log(email);
     try {
       set({ loading: true });
       const res = await fetch(`${BASE_URL}auth/login`, {

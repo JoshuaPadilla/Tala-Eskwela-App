@@ -6,8 +6,6 @@ import { useEffect } from "react";
 export default function OnboardingLayout() {
   const { user } = useAuthStore();
 
-  console.log(user);
-
   // ✅ Only run role-based redirect if no notification override
   useEffect(() => {
     if (user) {

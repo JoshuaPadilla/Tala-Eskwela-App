@@ -22,6 +22,7 @@ const AuthScreensLayout = () => {
       <Stack.Screen name="(parent)" options={{ headerShown: false }} />
       <Stack.Screen name="(student)" options={{ headerShown: false }} />
       <Stack.Screen name="(teacher)" options={{ headerShown: false }} />
+      <Stack.Screen name="(admin)" options={{ headerShown: false }} />
     </Stack>
   );
 };

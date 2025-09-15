@@ -52,7 +52,7 @@ export default function Index() {
       ) : (
         <KeyboardAvoidingView
           className="h-[50%] w-full justify-end"
-          behavior={Platform.OS === "ios" ? "padding" : "position"}
+          behavior={Platform.OS === "ios" ? "position" : "position"}
           keyboardVerticalOffset={0}
         >
           <BlurView
