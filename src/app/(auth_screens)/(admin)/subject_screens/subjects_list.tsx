@@ -1,12 +1,12 @@
 import CreateSubjectModal from "@/src/components/modals/create-subject.modal";
-import SubjectComponent from "@/src/components/subject";
+import SubjectComponent from "@/src/components/subject-component";
 import { useSubjectStore } from "@/src/stores/subject.store";
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SubjectsList = () => {
-  const { createSubject, getAllSubject, loading, subjects } = useSubjectStore();
+  const { getAllSubject, subjects } = useSubjectStore();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -21,6 +21,7 @@ const SubjectsList = () => {
   return (
     <>
       <CreateSubjectModal
+        onChange={() => {}}
         modalVisible={showModal}
         setModalVisible={setShowModal}
       />
@@ -37,9 +38,12 @@ const SubjectsList = () => {
 
         <ScrollView contentContainerClassName="pb-[200px] py-8 gap-4">
           {subjects &&
-            subjects.map((subject) => {
+            subjects.map((subject, index) => {
               return (
-                <SubjectComponent subject={subject} key={subject.subject_id} />
+                <SubjectComponent
+                  subject={subject}
+                  key={subject.subject_id || index}
+                />
               );
             })}
         </ScrollView>

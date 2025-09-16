@@ -4,5 +4,5 @@ export interface Subject {
   subject_id?: string;
   name: string;
   desc?: string;
-  schedules: Schedule[];
+  schedules?: Schedule[];
 }
