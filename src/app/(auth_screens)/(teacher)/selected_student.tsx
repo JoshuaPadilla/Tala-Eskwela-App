@@ -10,7 +10,7 @@ const SelectedStudent = () => {
   const handleRegister = () => {
     setStudentToRegister(selectedStudent?.id || "");
 
-    router.push("/(auth_screens)/(teacher)/register-student");
+    router.push("/(auth_screens)/(teacher)/register_student");
   };
 
   return (

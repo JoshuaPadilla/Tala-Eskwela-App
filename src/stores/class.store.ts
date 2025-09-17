@@ -1,39 +1,42 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
-import { Subject } from "../interfaces/subject.interface";
+import { Class } from "../interfaces/class.interface";
 
-interface SubjectStoreState {
+interface ClassStoreState {
   loading: boolean;
-  subjects: Subject[];
-  createSubject: (form: Omit<Subject, "subject_id">) => Promise<void>;
-  deleteSubject: (id: string) => Promise<void>;
-  getAllSubject: () => void;
+  classes: Class[];
+  createClass: (form: Omit<Class, "class_id">) => Promise<void>;
+  getClasses: () => void;
+  getClass: (class_id: string) => Promise<Class>;
 }
 
-export const useSubjectStore = create<SubjectStoreState>((set) => ({
+export const useClassStore = create<ClassStoreState>((set) => ({
   loading: false,
-  subjects: [],
-  createSubject: async (form) => {
+  classes: [],
+  createClass: async (form) => {
+    console.log(form);
     try {
       set({ loading: true });
 
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const res = await fetch(`${BASE_URL}subject`, {
+      const res = await fetch(`${BASE_URL}class`, {
         method: "Post",
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json; charset=utf-8",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, grade_lvl: Number(form.grade_lvl) }),
       });
 
       const data = await res.json();
 
-      if (!data.error) {
+      if (res.status === 201) {
         set((state) => ({
-          subjects: [...state.subjects, data],
+          classes: [...state.classes, data],
         }));
+      } else {
+        console.log(res.status);
       }
     } catch (error) {
       console.log(error);
@@ -41,12 +44,12 @@ export const useSubjectStore = create<SubjectStoreState>((set) => ({
       set({ loading: false });
     }
   },
-  getAllSubject: async () => {
+  getClasses: async () => {
     try {
       set({ loading: true });
 
-      const accessToken = AsyncStorage.getItem("accessToken");
-      const res = await fetch(`${BASE_URL}subject`, {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}class`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -56,7 +59,7 @@ export const useSubjectStore = create<SubjectStoreState>((set) => ({
       const data = await res.json();
 
       if (data) {
-        set({ subjects: data });
+        set({ classes: data });
       }
     } catch (error) {
       console.log(error);
@@ -64,29 +67,27 @@ export const useSubjectStore = create<SubjectStoreState>((set) => ({
       set({ loading: false });
     }
   },
-  deleteSubject: async (id) => {
+  getClass: async (class_id): Class => {
     try {
       set({ loading: true });
 
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const res = await fetch(`${BASE_URL}subject/${id}`, {
-        method: "Delete",
+      const res = await fetch(`${BASE_URL}class/${class_id}`, {
+        method: "Get",
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      if (res.status === 200) {
-        set((state) => {
-          const updatedSubjects = state.subjects.filter(
-            (subject) => subject.id !== id
-          );
+      const data = await res.json();
 
-          return { subjects: updatedSubjects };
-        });
+      if (res.ok) {
+        return data as Class;
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 }));

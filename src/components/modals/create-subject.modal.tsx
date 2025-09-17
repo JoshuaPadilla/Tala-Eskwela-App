@@ -14,13 +14,11 @@ import {
 interface CreateModalProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
-  onChange: (value: string) => void;
 }
 
 const CreateSubjectModal = ({
   modalVisible,
   setModalVisible,
-  onChange,
 }: CreateModalProps) => {
   const { createSubject, loading } = useSubjectStore();
 

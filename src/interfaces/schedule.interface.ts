@@ -3,7 +3,7 @@ import { Class } from "./class.interface";
 import { Subject } from "./subject.interface";
 
 export interface Schedule {
-  schedule_id: string;
+  id: string;
   day_of_week: DAY_OF_WEEK;
   start_time: string;
   end_time: string;

@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
 import { Roles } from "../enums/role.enum";
@@ -25,7 +26,6 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
   isChecking: false,
   user: null,
   login: async (email, password, push_token) => {
-    console.log(email);
     try {
       set({ loading: true });
       const res = await fetch(`${BASE_URL}auth/login`, {
@@ -81,6 +81,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
     try {
       await AsyncStorage.removeItem("accessToken");
       set({ user: null });
+      router.push("/");
     } catch (error) {
       console.log(error);
     }

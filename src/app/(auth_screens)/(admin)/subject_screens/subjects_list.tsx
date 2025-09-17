@@ -1,3 +1,4 @@
+import BackComponent from "@/src/components/back_component";
 import CreateSubjectModal from "@/src/components/modals/create-subject.modal";
 import SubjectComponent from "@/src/components/subject-component";
 import { useSubjectStore } from "@/src/stores/subject.store";
@@ -21,11 +22,12 @@ const SubjectsList = () => {
   return (
     <>
       <CreateSubjectModal
-        onChange={() => {}}
         modalVisible={showModal}
         setModalVisible={setShowModal}
       />
       <SafeAreaView className="p-8">
+        <BackComponent />
+
         <View className="flex-row justify-between">
           <Text>Subjects:</Text>
           <Pressable
@@ -40,10 +42,7 @@ const SubjectsList = () => {
           {subjects &&
             subjects.map((subject, index) => {
               return (
-                <SubjectComponent
-                  subject={subject}
-                  key={subject.subject_id || index}
-                />
+                <SubjectComponent subject={subject} key={subject.id || index} />
               );
             })}
         </ScrollView>

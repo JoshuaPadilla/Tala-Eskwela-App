@@ -1,5 +1,7 @@
 import { ImageSourcePropType } from "react-native";
 import app_logo from "../../../assets/icons/app_logo.png";
+import back from "../../../assets/icons/back_green.png";
+import plus from "../../../assets/icons/plus_icon.png";
 import parent from "../../../assets/icons/role_selection/parent.png";
 import student from "../../../assets/icons/role_selection/student.png";
 import teacher from "../../../assets/icons/role_selection/teacher.png";
@@ -11,6 +13,8 @@ interface IconsState {
   teacher: ImageSourcePropType;
   student: ImageSourcePropType;
   trash: ImageSourcePropType;
+  back: ImageSourcePropType;
+  plus: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -19,4 +23,6 @@ export const Icons: IconsState = {
   teacher,
   student,
   trash,
+  back,
+  plus,
 };

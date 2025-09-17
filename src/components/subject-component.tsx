@@ -10,7 +10,7 @@ interface SubjectProps {
 }
 
 const SubjectComponent = ({ subject }: SubjectProps) => {
-  const { deleteSubject, loading } = useSubjectStore();
+  const { deleteSubject } = useSubjectStore();
 
   const handleDeleteSubject = (id: string) => {
     deleteSubject(id);
@@ -22,7 +22,7 @@ const SubjectComponent = ({ subject }: SubjectProps) => {
         <Pressable
           hitSlop={5}
           onPress={() => {
-            handleDeleteSubject(subject?.subject_id || "");
+            handleDeleteSubject(subject?.id || "");
           }}
         >
           <Image
