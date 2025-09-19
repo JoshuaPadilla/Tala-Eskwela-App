@@ -17,13 +17,18 @@ const AdminHome = () => {
     return;
   };
 
+  const handleAddSchedules = () => {
+    router.push("/(auth_screens)/(admin)/schedule_screens/schedules_list");
+    return;
+  };
+
   const handleLogout = () => {
     console.log("logout");
     logout();
   };
 
   return (
-    <SafeAreaView className="p-8">
+    <SafeAreaView className="p-8 flex-1">
       <View className="h-[40%]">
         <Text>Hello Admin</Text>
       </View>
@@ -47,7 +52,10 @@ const AdminHome = () => {
           <Text>Add Class</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="px-2 py-4 w-[48%] bg-status-processing rounded-md justify-center items-center">
+        <TouchableOpacity
+          className="px-2 py-4 w-[48%] bg-status-processing rounded-md justify-center items-center"
+          onPress={handleAddSchedules}
+        >
           <Text>Add Schedule</Text>
         </TouchableOpacity>
       </View>

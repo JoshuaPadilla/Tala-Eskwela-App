@@ -1,5 +1,5 @@
 import BackComponent from "@/src/components/back_component";
-import ClassComponent from "@/src/components/class-component";
+import ClassComponent from "@/src/components/class_components/class-component";
 import { useClassStore } from "@/src/stores/class.store";
 import { router } from "expo-router";
 import React, { useEffect } from "react";
@@ -49,7 +49,7 @@ const CLassList = () => {
               classes.map((classObj, index) => (
                 <ClassComponent
                   classObj={classObj}
-                  key={classObj.class_id || index}
+                  key={classObj.id || index}
                 />
               ))}
           </ScrollView>

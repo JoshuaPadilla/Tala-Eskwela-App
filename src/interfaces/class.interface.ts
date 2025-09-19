@@ -7,7 +7,7 @@ export interface Class {
   section: string;
   grade_lvl: number | string;
   createdAt?: Date;
-  class_teacher: Teacher | string;
+  class_teacher: Teacher;
   students?: Student[];
   attendance_records?: string;
   schedules?: Schedule[];

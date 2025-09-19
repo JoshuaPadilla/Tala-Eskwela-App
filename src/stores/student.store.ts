@@ -7,7 +7,7 @@ interface StudentStoreState {
   loading: boolean;
   selectedStudent: Student | null;
   students: Student[];
-  getStudents: () => void;
+  getStudents: () => Promise<void>;
   getStudent: (student_id: string) => void;
   setStudentToRegister: (student_id: string) => void;
   updateStudents: (data: Partial<Student>) => void;

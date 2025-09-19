@@ -8,5 +8,5 @@ export interface Schedule {
   start_time: string;
   end_time: string;
   class: Class;
-  Subject: Subject;
+  subject: Subject;
 }

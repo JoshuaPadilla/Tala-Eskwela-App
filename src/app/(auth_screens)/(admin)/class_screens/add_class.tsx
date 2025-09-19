@@ -1,7 +1,7 @@
 import BackComponent from "@/src/components/back_component";
 import SelectTeacherModal from "@/src/components/modals/select-teacher-modal";
 import { Icons } from "@/src/constants/icons/icons.constant";
-import { Class } from "@/src/interfaces/class.interface";
+import { CreateClassDto } from "@/src/dto/create-class.dto";
 import { Teacher } from "@/src/interfaces/teacher.interface";
 import { useClassStore } from "@/src/stores/class.store";
 import { useTeacherStore } from "@/src/stores/teacher.store";
@@ -22,7 +22,7 @@ const AddClass = () => {
   const { createClass, loading } = useClassStore();
   const [selectTeacher, setSelectTeacher] = useState(false);
 
-  const [classForm, setClassForm] = useState<Class>({
+  const [classForm, setClassForm] = useState<CreateClassDto>({
     class_teacher: "",
     grade_lvl: "",
     section: "",

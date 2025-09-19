@@ -11,8 +11,12 @@ const TeacherHome = () => {
     useStudentStore();
 
   useEffect(() => {
-    getStudents();
-  }, []);
+    const loadStudents = async () => {
+      await getStudents();
+    };
+
+    loadStudents();
+  }, [getStudents]);
 
   const handleSelecStudent = (student_id: string) => {
     getStudent(student_id);

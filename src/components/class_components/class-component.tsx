@@ -1,9 +1,9 @@
+import { Icons } from "@/src/constants/icons/icons.constant";
+import { Class } from "@/src/interfaces/class.interface";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import { Icons } from "../constants/icons/icons.constant";
-import { Class } from "../interfaces/class.interface";
 
 interface ClassComponentProps {
   classObj: Class;

@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Icons } from "../constants/icons/icons.constant";
 import { Images } from "../constants/images/image.constants";
 import { usePushNotifications } from "../hooks/usePushNotification";
 import { useAuthStore } from "../stores/auth.store";
@@ -41,8 +40,11 @@ export default function Index() {
         padding: 10,
       }}
     >
-      <View className="flex h-[60%] items-center justify-center flex-1">
-        <Image source={Icons.app_logo} style={{ height: 200, width: 200 }} />
+      <View className="mt-20 flex h-[60%] items-center justify-center flex-1 flex-wrap w-[250px] flex-row">
+        <Image source={Images.alvin} style={{ height: 100, width: 100 }} />
+        <Image source={Images.rovel} style={{ height: 100, width: 100 }} />
+        <Image source={Images.dino} style={{ height: 100, width: 100 }} />
+        <Image source={Images.jenjen} style={{ height: 100, width: 100 }} />
       </View>
 
       {isChecking ? (

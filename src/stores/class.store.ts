@@ -1,21 +1,21 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
+import { CreateClassDto } from "../dto/create-class.dto";
 import { Class } from "../interfaces/class.interface";
 
 interface ClassStoreState {
   loading: boolean;
   classes: Class[];
-  createClass: (form: Omit<Class, "class_id">) => Promise<void>;
+  createClass: (form: CreateClassDto) => Promise<void>;
   getClasses: () => void;
-  getClass: (class_id: string) => Promise<Class>;
+  getClass: (class_id: string) => Promise<Class | undefined>;
 }
 
 export const useClassStore = create<ClassStoreState>((set) => ({
   loading: false,
   classes: [],
   createClass: async (form) => {
-    console.log(form);
     try {
       set({ loading: true });
 
@@ -67,7 +67,7 @@ export const useClassStore = create<ClassStoreState>((set) => ({
       set({ loading: false });
     }
   },
-  getClass: async (class_id): Class => {
+  getClass: async (class_id): Promise<Class | undefined> => {
     try {
       set({ loading: true });
 
@@ -81,8 +81,10 @@ export const useClassStore = create<ClassStoreState>((set) => ({
 
       const data = await res.json();
 
+      const parsedClass = data as Class;
+
       if (res.ok) {
-        return data as Class;
+        return parsedClass;
       }
     } catch (error) {
       console.log(error);
