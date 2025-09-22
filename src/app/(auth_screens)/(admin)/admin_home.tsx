@@ -7,19 +7,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const AdminHome = () => {
   const { logout } = useAuthStore();
 
-  const handleAddSubject = () => {
+  const handleGoToSubjects = () => {
     router.push("/(auth_screens)/(admin)/subject_screens/subjects_list");
     return;
   };
 
-  const handleAddClass = () => {
+  const handleGoToClasses = () => {
     router.push("/(auth_screens)/(admin)/class_screens/class_list");
     return;
   };
 
-  const handleAddSchedules = () => {
+  const handleGoToSchedules = () => {
     router.push("/(auth_screens)/(admin)/schedule_screens/schedules_list");
     return;
+  };
+
+  const handleGoToTeachers = () => {
+    router.push("/(auth_screens)/(admin)/teachers_screens/teachers_list");
   };
 
   const handleLogout = () => {
@@ -40,23 +44,30 @@ const AdminHome = () => {
       <View className="flex flex-row flex-wrap justify-between items-center gap-2 p-4">
         <TouchableOpacity
           className="px-2 py-4 w-[48%] bg-status-processing rounded-md justify-center items-center"
-          onPress={handleAddSubject}
+          onPress={handleGoToSubjects}
         >
-          <Text>Add Subject</Text>
+          <Text>Subjects</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           className="px-2 py-4 w-[48%] bg-status-processing rounded-md justify-center items-center"
-          onPress={handleAddClass}
+          onPress={handleGoToClasses}
         >
-          <Text>Add Class</Text>
+          <Text>Classes</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           className="px-2 py-4 w-[48%] bg-status-processing rounded-md justify-center items-center"
-          onPress={handleAddSchedules}
+          onPress={handleGoToSchedules}
         >
-          <Text>Add Schedule</Text>
+          <Text>Schedules</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="px-2 py-4 w-[48%] bg-status-processing rounded-md justify-center items-center"
+          onPress={handleGoToTeachers}
+        >
+          <Text>Teachers</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

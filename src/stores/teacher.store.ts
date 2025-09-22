@@ -6,18 +6,18 @@ import { Teacher } from "../interfaces/teacher.interface";
 interface TeacherStoreState {
   loading: boolean;
   teachers: Teacher[];
-  getTeachers: () => void;
+  getTeachers: (query?: string) => void;
 }
 
 export const useTeacherStore = create<TeacherStoreState>((set) => ({
   loading: false,
   teachers: [],
-  getTeachers: async () => {
+  getTeachers: async (query) => {
     try {
       set({ loading: true });
 
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const res = await fetch(`${BASE_URL}teachers`, {
+      const res = await fetch(`${BASE_URL}teachers${query}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${accessToken}`,

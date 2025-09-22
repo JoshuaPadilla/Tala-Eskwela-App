@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
 import { Roles } from "../enums/role.enum";
+import { Admin } from "../interfaces/admin.interface";
 import { Parent } from "../interfaces/parent.interface";
 import { Student } from "../interfaces/student.interface";
 import { Teacher } from "../interfaces/teacher.interface";
@@ -10,7 +11,11 @@ import { Teacher } from "../interfaces/teacher.interface";
 interface AuthStoreState {
   loading: boolean;
   isChecking: boolean;
-  user: Student | Teacher | Parent | null;
+  user: Teacher | Student | Parent | Admin | null;
+  teacherUser: Teacher | null;
+  studentUser: Student | null;
+  parentUser: Parent | null;
+  adminUser: Admin | null;
   login: (
     email: string,
     password: string,
@@ -19,13 +24,20 @@ interface AuthStoreState {
   register: (role: Roles, form: Student | Teacher | Parent) => void;
   logout: () => void;
   checkAuth: () => void;
+  setParsedUser: (data: any) => void;
 }
 
-export const useAuthStore = create<AuthStoreState>((set) => ({
+export const useAuthStore = create<AuthStoreState>((set, get) => ({
   loading: false,
-  isChecking: false,
   user: null,
+  isChecking: false,
+  teacherUser: null,
+  studentUser: null,
+  parentUser: null,
+  adminUser: null,
   login: async (email, password, push_token) => {
+    const { setParsedUser } = get();
+
     try {
       set({ loading: true });
       const res = await fetch(`${BASE_URL}auth/login`, {
@@ -39,7 +51,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
       const data = await res.json();
       if (data) {
         await AsyncStorage.setItem("accessToken", data.access_token);
-        set({ user: data.user });
+        setParsedUser(data.user);
       } else {
         throw new Error("Failed to login");
       }
@@ -50,6 +62,8 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
     }
   },
   register: async (role, form) => {
+    const { setParsedUser } = get();
+
     console.log("Registration form:", form);
     try {
       set({ loading: true });
@@ -66,7 +80,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 
       if (data) {
         await AsyncStorage.setItem("accessToken", data.data.access_token);
-        set({ user: data.data.user });
+        setParsedUser(data.data.user);
       } else {
         throw new Error("Failed to register");
       }
@@ -80,7 +94,12 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
   logout: async () => {
     try {
       await AsyncStorage.removeItem("accessToken");
-      set({ user: null });
+      set({
+        teacherUser: null,
+        studentUser: null,
+        parentUser: null,
+        adminUser: null,
+      });
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -88,6 +107,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
   },
 
   checkAuth: async () => {
+    const { setParsedUser } = get();
     try {
       set({ isChecking: true });
 
@@ -108,7 +128,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
       const data = await res.json();
 
       if (data) {
-        set({ user: data });
+        setParsedUser(data);
       } else {
         console.log("No data");
       }
@@ -116,6 +136,21 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
       console.log(error);
     } finally {
       set({ isChecking: false });
+    }
+  },
+
+  setParsedUser: (userData) => {
+    switch (userData.role) {
+      case "teacher":
+        set({ teacherUser: userData, user: userData });
+      case "student":
+        set({ studentUser: userData, user: userData });
+      case "parent":
+        set({ parentUser: userData, user: userData });
+      case "admin":
+        set({ adminUser: userData, user: userData });
+      default:
+        return null;
     }
   },
 }));

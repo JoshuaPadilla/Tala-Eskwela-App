@@ -1,12 +1,12 @@
+import { Teacher } from "@/src/interfaces/teacher.interface";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Teacher } from "../interfaces/teacher.interface";
 
 interface TeacherComponentProps {
   teacher: Teacher;
   onSelect: (teacher: Teacher) => void;
 }
-const TeacherComponent = ({ teacher, onSelect }: TeacherComponentProps) => {
+const TeacherListComponent = ({ teacher, onSelect }: TeacherComponentProps) => {
   const [isPressed, setIsPressed] = useState(false);
 
   const handleSelect = () => {
@@ -24,6 +24,9 @@ const TeacherComponent = ({ teacher, onSelect }: TeacherComponentProps) => {
       <Text>
         {teacher.first_name} {teacher.last_name}
       </Text>
+      <Text>
+        {teacher.advisory_class?.grade_lvl} {teacher.advisory_class?.section}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -37,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TeacherComponent;
+export default TeacherListComponent;

@@ -28,7 +28,7 @@ const SchedulesList = () => {
     <SafeAreaView className="p-8">
       <BackComponent />
       <View className="flex-row justify-between w-full">
-        <Text>Classes:</Text>
+        <Text>Schedules:</Text>
         <Pressable
           className="px-4 py-2 bg-primary-300 rounded-md"
           onPress={handleAddSchedule}

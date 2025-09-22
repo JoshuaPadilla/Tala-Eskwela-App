@@ -87,11 +87,14 @@ const AddSchedule = () => {
 
   const handleSelectClassCallback = (classObj?: Class) => {
     if (!classObj) {
+      setSelectClassModalVisible(false);
+
       return;
+    } else {
+      setClassToDisplay(classObj);
+      handleInputChange("class_id", classObj.id || "");
+      setSelectClassModalVisible(false);
     }
-    setClassToDisplay(classObj);
-    setSelectClassModalVisible(false);
-    handleInputChange("class_id", classObj.id || "");
   };
 
   const handleSelectEndTime = () => {

@@ -1,4 +1,5 @@
 import { Roles } from "../enums/role.enum";
+import { Class } from "./class.interface";
 import { Course } from "./course.interface";
 import { Student } from "./student.interface";
 
@@ -14,4 +15,5 @@ export interface Teacher {
   role: Roles;
   teached_courses: Course[];
   students: Student[];
+  advisory_class: Class;
 }

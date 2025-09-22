@@ -2,7 +2,7 @@ import { Teacher } from "@/src/interfaces/teacher.interface";
 import { useTeacherStore } from "@/src/stores/teacher.store";
 import React from "react";
 import { Modal, ScrollView, Text, View } from "react-native";
-import TeacherComponent from "../teacher-component";
+import TeacherModalListComponent from "../teacher-modal-list-component.tsx";
 
 interface SelectTeacherModalProps {
   modalVisible: boolean;
@@ -30,7 +30,7 @@ const SelectTeacherModal = ({
           <ScrollView contentContainerClassName="pb-[200px] py-4 gap-4">
             {teachers &&
               teachers.map((teacher, index) => (
-                <TeacherComponent
+                <TeacherModalListComponent
                   teacher={teacher}
                   onSelect={handleOnSelectCallback}
                   key={teacher.id || index}

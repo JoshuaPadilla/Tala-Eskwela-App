@@ -7,6 +7,7 @@ import { useClassStore } from "@/src/stores/class.store";
 import { useTeacherStore } from "@/src/stores/teacher.store";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -38,7 +39,7 @@ const AddClass = () => {
   };
 
   const handleAddTeacher = () => {
-    getTeachers();
+    getTeachers("?advisory_class=null");
     setSelectTeacher(true);
   };
 
@@ -55,6 +56,8 @@ const AddClass = () => {
       return;
     }
     await createClass(classForm);
+
+    router.back();
   };
 
   return (

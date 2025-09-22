@@ -10,6 +10,7 @@ interface ClassStoreState {
   createClass: (form: CreateClassDto) => Promise<void>;
   getClasses: () => void;
   getClass: (class_id: string) => Promise<Class | undefined>;
+  deleteClass: (class_id: string) => Promise<void>;
 }
 
 export const useClassStore = create<ClassStoreState>((set) => ({
@@ -85,6 +86,35 @@ export const useClassStore = create<ClassStoreState>((set) => ({
 
       if (res.ok) {
         return parsedClass;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  deleteClass: async (class_id) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}class/${class_id}`, {
+        method: "Delete",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (res.ok) {
+        set((state) => {
+          const updatedClasses = state.classes.filter(
+            (sched) => sched.id !== class_id
+          );
+
+          return {
+            classes: updatedClasses,
+          };
+        });
       }
     } catch (error) {
       console.log(error);

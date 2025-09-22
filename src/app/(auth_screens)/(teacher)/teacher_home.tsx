@@ -1,12 +1,14 @@
+import BackComponent from "@/src/components/back_component";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { useStudentStore } from "@/src/stores/student.store";
 import { router } from "expo-router";
 import React, { useEffect } from "react";
-import { ScrollView, Text, TouchableOpacity } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherHome = () => {
-  const { user, logout } = useAuthStore();
+  const { teacherUser, logout } = useAuthStore();
+
   const { students, getStudents, getStudent, selectedStudent } =
     useStudentStore();
 
@@ -31,7 +33,13 @@ const TeacherHome = () => {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-white gap-10">
-      <Text>Hello {user?.first_name}</Text>
+      <BackComponent />
+
+      <View className="p-4">
+        <Text>{teacherUser?.advisory_class.grade_lvl}</Text>
+      </View>
+
+      <Text>Hello {teacherUser?.first_name}</Text>
       <Text>students</Text>
 
       <TouchableOpacity onPress={handleLogout}>

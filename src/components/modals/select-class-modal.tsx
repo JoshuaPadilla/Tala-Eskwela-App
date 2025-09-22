@@ -4,7 +4,7 @@ import React from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
 import ClassListItemComponent from "../class_components/class-list-item-component";
 
-interface SelectClassModal {
+interface SelectClassModalProps {
   modalVisible: boolean;
   onCloseCallback: (classObj?: Class) => void;
 }
@@ -12,7 +12,7 @@ interface SelectClassModal {
 const SelectClassModal = ({
   modalVisible,
   onCloseCallback,
-}: SelectClassModal) => {
+}: SelectClassModalProps) => {
   const { classes, loading } = useClassStore();
 
   const handleOnSelectCallback = (classObj?: Class) => {

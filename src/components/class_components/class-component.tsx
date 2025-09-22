@@ -1,17 +1,36 @@
 import { Icons } from "@/src/constants/icons/icons.constant";
 import { Class } from "@/src/interfaces/class.interface";
+import { useClassStore } from "@/src/stores/class.store";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import React from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface ClassComponentProps {
   classObj: Class;
 }
 
 const ClassComponent = ({ classObj }: ClassComponentProps) => {
-  const handleDeleteClass = () => {
-    console.log("hello World");
+  console.log(classObj.class_teacher.id);
+  const [loading, setLoading] = useState(false);
+
+  const { deleteClass } = useClassStore();
+
+  const handleDeleteClass = async () => {
+    try {
+      setLoading(true);
+      await deleteClass(classObj.id || "");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSelect = () => {
@@ -20,6 +39,14 @@ const ClassComponent = ({ classObj }: ClassComponentProps) => {
       params: { class_id: classObj.id },
     });
   };
+
+  if (loading) {
+    return (
+      <View className="items-center justify-center">
+        <ActivityIndicator size={"small"} />
+      </View>
+    );
+  }
 
   return (
     <TouchableOpacity

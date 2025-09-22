@@ -28,8 +28,6 @@ const ViewClass = () => {
       if (class_id) {
         const classObj = await getClass(class_id as string);
 
-        console.log(classObj);
-
         if (classObj) {
           setSelectedClass(classObj);
         }
@@ -44,9 +42,7 @@ const ViewClass = () => {
       setToggleLoading(true);
       switch (toggleState) {
         case ClassToggle.ATTENDANCE:
-          console.log("Attendance");
         case ClassToggle.SCHEDULE:
-          console.log("Schedule");
         case ClassToggle.STUDENTS:
           await getStudents();
       }
