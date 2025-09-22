@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import { Icons } from "../constants/icons/icons.constant";
+import { Images } from "../constants/images/image.constants";
 import { Roles } from "../enums/role.enum";
 
 interface RoleChoiceProps {
@@ -30,19 +31,19 @@ const RoleSelectionForm = ({ onSelect }: RoleSelectionFormProps) => {
 
       <View className="w-full justify-center items-center mt-12 gap-4">
         <RoleChoice
-          icon={Icons.teacher}
+          icon={Images.alvin}
           title={Roles.TEACHER}
           bg_color="#22d3ee"
           onPress={onSelect}
         />
         <RoleChoice
-          icon={Icons.student}
+          icon={Images.dino}
           title={Roles.STUDENT}
           bg_color="#fb923c"
           onPress={onSelect}
         />
         <RoleChoice
-          icon={Icons.parent}
+          icon={Images.revel}
           title={Roles.PARENT}
           bg_color="#facc15"
           onPress={onSelect}

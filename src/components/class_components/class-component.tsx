@@ -17,7 +17,6 @@ interface ClassComponentProps {
 }
 
 const ClassComponent = ({ classObj }: ClassComponentProps) => {
-  console.log(classObj.class_teacher.id);
   const [loading, setLoading] = useState(false);
 
   const { deleteClass } = useClassStore();

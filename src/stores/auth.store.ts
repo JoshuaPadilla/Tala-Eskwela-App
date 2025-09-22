@@ -2,7 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
+import { CreateUserDto } from "../dto/create-user.dto";
 import { Roles } from "../enums/role.enum";
+import { objectJsonFormatter } from "../helpers/objectJsonFormatter";
 import { Admin } from "../interfaces/admin.interface";
 import { Parent } from "../interfaces/parent.interface";
 import { Student } from "../interfaces/student.interface";
@@ -21,7 +23,7 @@ interface AuthStoreState {
     password: string,
     push_token?: string
   ) => Promise<void>;
-  register: (role: Roles, form: Student | Teacher | Parent) => void;
+  register: (role: Roles, form: CreateUserDto) => void;
   logout: () => void;
   checkAuth: () => void;
   setParsedUser: (data: any) => void;
@@ -50,6 +52,7 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
 
       const data = await res.json();
       if (data) {
+        objectJsonFormatter(data);
         await AsyncStorage.setItem("accessToken", data.access_token);
         setParsedUser(data.user);
       } else {
@@ -64,7 +67,6 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
   register: async (role, form) => {
     const { setParsedUser } = get();
 
-    console.log("Registration form:", form);
     try {
       set({ loading: true });
 
@@ -99,6 +101,7 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
         studentUser: null,
         parentUser: null,
         adminUser: null,
+        user: null,
       });
       router.push("/");
     } catch (error) {

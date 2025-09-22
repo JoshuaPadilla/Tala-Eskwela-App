@@ -11,6 +11,7 @@ interface StudentStoreState {
   getStudent: (student_id: string) => void;
   setStudentToRegister: (student_id: string) => void;
   updateStudents: (data: Partial<Student>) => void;
+  deleteStudent: (student_id: string) => Promise<void>;
 }
 
 export const useStudentStore = create<StudentStoreState>((set) => ({
@@ -90,5 +91,35 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
         students: updatedStudents,
       };
     });
+  },
+  deleteStudent: async (student_id: string) => {
+    try {
+      set({ loading: true });
+      const accessToken = AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}students/${student_id}`, {
+        method: "Delete",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (res.ok) {
+        set((state) => {
+          const updatedStudents = state.students.filter(
+            (student) => student.id !== student_id
+          );
+
+          return {
+            students: updatedStudents,
+          };
+        });
+      } else {
+        throw new Error("No students found");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
   },
 }));

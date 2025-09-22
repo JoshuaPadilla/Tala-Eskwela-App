@@ -1,12 +1,9 @@
 import RegistrationForm from "@/src/components/registration-form";
 import RoleSelectionForm from "@/src/components/role-selection";
 import { Images } from "@/src/constants/images/image.constants";
+import { CreateUserDto } from "@/src/dto/create-user.dto";
 import { Roles } from "@/src/enums/role.enum";
 import { usePushNotifications } from "@/src/hooks/usePushNotification";
-import { Parent } from "@/src/interfaces/parent.interface";
-import { RegistrationFormInterface } from "@/src/interfaces/registration-form.interface";
-import { Student } from "@/src/interfaces/student.interface";
-import { Teacher } from "@/src/interfaces/teacher.interface";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { ImageBackground } from "expo-image";
 import React, { useState } from "react";
@@ -16,22 +13,21 @@ const Register = () => {
   const { expoPushToken } = usePushNotifications();
 
   const [role, setRole] = useState<Roles | null>(null);
-  const [registrationData, setRegistrationData] =
-    useState<RegistrationFormInterface>({
-      email: "",
-      first_name: "",
-      last_name: "",
-      middle_name: "",
-      password: "",
-      phone: "",
-      push_token: "",
-    });
+  const [registrationData, setRegistrationData] = useState<CreateUserDto>({
+    email: "",
+    first_name: "",
+    last_name: "",
+    middle_name: "",
+    password: "",
+    phone: "",
+    push_token: "",
+  });
 
   const [roleSelected, setRoleSelected] = useState(false);
 
   const handleSelecRole = (role: Roles) => {
     setRole(role);
-    setRegistrationData((prev: RegistrationFormInterface) => ({
+    setRegistrationData((prev: CreateUserDto) => ({
       ...prev,
       push_token: expoPushToken?.data,
     }));
@@ -44,14 +40,14 @@ const Register = () => {
 
     switch (role) {
       case Roles.PARENT:
-        register(role, registrationData as Parent);
+        register(role, registrationData);
         return;
       case Roles.TEACHER:
-        register(role, registrationData as Teacher);
+        register(role, registrationData);
         return;
 
       case Roles.STUDENT:
-        register(role, registrationData as Student);
+        register(role, registrationData);
         return;
       default:
         return;

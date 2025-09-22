@@ -1,16 +1,21 @@
-import BackComponent from "@/src/components/back_component";
+import SelectStudentsModal from "@/src/components/modals/select-students.modal";
+import StudentListComponent from "@/src/components/student-list-component";
 import { useAuthStore } from "@/src/stores/auth.store";
+import { useClassStore } from "@/src/stores/class.store";
 import { useStudentStore } from "@/src/stores/student.store";
 import { router } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherHome = () => {
   const { teacherUser, logout } = useAuthStore();
-
   const { students, getStudents, getStudent, selectedStudent } =
     useStudentStore();
+  const { addStudents } = useClassStore();
+
+  const [selectStudentModalVisible, setSelectStudentModalVisible] =
+    useState(false);
 
   useEffect(() => {
     const loadStudents = async () => {
@@ -20,6 +25,16 @@ const TeacherHome = () => {
     loadStudents();
   }, [getStudents]);
 
+  const handleSelectStudents = () => {
+    getStudents();
+    setSelectStudentModalVisible(true);
+  };
+
+  const handleSelectStudentsCallback = (student_ids: string[]) => {
+    addStudents(teacherUser?.advisory_class.id || "", student_ids);
+    setSelectStudentModalVisible(false);
+  };
+
   const handleSelecStudent = (student_id: string) => {
     getStudent(student_id);
     router.push("/(auth_screens)/(teacher)/selected_student");
@@ -28,41 +43,60 @@ const TeacherHome = () => {
   const handleLogout = () => {
     logout();
 
-    router.push("/");
+    router.replace("/");
+  };
+
+  const handleOnRequestClose = () => {
+    setSelectStudentModalVisible(false);
   };
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-center bg-white gap-10">
-      <BackComponent />
-
-      <View className="p-4">
-        <Text>{teacherUser?.advisory_class.grade_lvl}</Text>
-      </View>
-
-      <Text>Hello {teacherUser?.first_name}</Text>
-      <Text>students</Text>
-
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
-
-      <ScrollView contentContainerClassName="pb[100px] py-12 gap-2">
-        {students.map((student) => (
+    <>
+      <SelectStudentsModal
+        modalVisible={selectStudentModalVisible}
+        onCloseCallback={handleSelectStudentsCallback}
+        onClose={handleOnRequestClose}
+      />
+      <SafeAreaView className="flex-1 p-8">
+        <View className="flex-row justify-between">
           <TouchableOpacity
-            key={student.id}
-            className="bg-purple-100 px-4 py-2 rounded-md"
-            onPress={() => handleSelecStudent(student.id || "")}
+            onPress={handleLogout}
+            className="px-4 py-2 items-center justify-center bg-danger rounded-md mb-4"
           >
-            <Text>
-              {student.first_name} {student.last_name}{" "}
-              {student.rfid_tag_uid || "Not yet Registered"}
-            </Text>
-
-            <Text>{student.push_token}</Text>
+            <Text>Logout</Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+        </View>
+
+        <View className="">
+          <Text>Grade {teacherUser?.advisory_class?.grade_lvl}</Text>
+          <Text>Section {teacherUser?.advisory_class?.section}</Text>
+        </View>
+
+        <Text>Hello {teacherUser?.first_name}</Text>
+        <Text>students</Text>
+
+        {!teacherUser?.advisory_class ? (
+          <View className="items-center justify-center flex-1">
+            <Text>No Advisory Class</Text>
+          </View>
+        ) : (
+          <>
+            <TouchableOpacity
+              onPress={handleSelectStudents}
+              className="p-4 items-center justify-center bg-cyan-200 rounded-md mt-4"
+            >
+              <Text>Add Student</Text>
+            </TouchableOpacity>
+
+            <ScrollView contentContainerClassName="w-full pb[100px] py-12 gap-2 mt-10">
+              {students.map((student) => (
+                <StudentListComponent student={student} key={student.id} />
+              ))}
+            </ScrollView>
+          </>
+        )}
+      </SafeAreaView>
+    </>
   );
 };
 

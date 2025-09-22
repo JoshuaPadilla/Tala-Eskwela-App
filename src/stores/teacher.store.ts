@@ -7,6 +7,7 @@ interface TeacherStoreState {
   loading: boolean;
   teachers: Teacher[];
   getTeachers: (query?: string) => void;
+  deleteTeacher: (id: string) => Promise<void>;
 }
 
 export const useTeacherStore = create<TeacherStoreState>((set) => ({
@@ -17,7 +18,7 @@ export const useTeacherStore = create<TeacherStoreState>((set) => ({
       set({ loading: true });
 
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const res = await fetch(`${BASE_URL}teachers${query}`, {
+      const res = await fetch(`${BASE_URL}teachers${query ? query : ""}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -28,6 +29,35 @@ export const useTeacherStore = create<TeacherStoreState>((set) => ({
 
       if (data) {
         set({ teachers: data });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  deleteTeacher: async (id) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}teachers/${id}`, {
+        method: "Delete",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (res.ok) {
+        set((state) => {
+          const updatedTeachers = state.teachers.filter(
+            (teacher) => teacher.id !== id
+          );
+
+          return {
+            teachers: updatedTeachers,
+          };
+        });
       }
     } catch (error) {
       console.log(error);

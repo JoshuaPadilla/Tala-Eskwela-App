@@ -11,6 +11,7 @@ interface ClassStoreState {
   getClasses: () => void;
   getClass: (class_id: string) => Promise<Class | undefined>;
   deleteClass: (class_id: string) => Promise<void>;
+  addStudents: (class_id: string, student_ids: string[]) => void;
 }
 
 export const useClassStore = create<ClassStoreState>((set) => ({
@@ -115,6 +116,33 @@ export const useClassStore = create<ClassStoreState>((set) => ({
             classes: updatedClasses,
           };
         });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  addStudents: async (class_id: string, student_ids: string[]) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}class/add/${class_id}`, {
+        method: "Post",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({ student_ids }),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 201) {
+        console.log(data);
+      } else {
+        console.log(res.status);
       }
     } catch (error) {
       console.log(error);

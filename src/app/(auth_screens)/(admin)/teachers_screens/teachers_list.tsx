@@ -19,7 +19,7 @@ const TeachersList = () => {
         <ActivityIndicator size={"large"} />
       ) : (
         <ScrollView contentContainerClassName="pb-[200px] py-8 gap-4">
-          {teachers &&
+          {teachers.length &&
             teachers.map((teacher, index) => (
               <TeacherListComponent
                 onSelect={() => {}}

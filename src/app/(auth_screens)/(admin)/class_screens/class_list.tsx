@@ -45,7 +45,7 @@ const CLassList = () => {
           <ActivityIndicator size={"large"} />
         ) : (
           <ScrollView contentContainerClassName="pb-[200px] py-8 gap-4">
-            {classes &&
+            {classes.length !== 0 &&
               classes.map((classObj, index) => (
                 <ClassComponent
                   classObj={classObj}
