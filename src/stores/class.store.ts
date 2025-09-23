@@ -140,7 +140,6 @@ export const useClassStore = create<ClassStoreState>((set) => ({
       const data = await res.json();
 
       if (res.status === 201) {
-        console.log(data);
       } else {
         console.log(res.status);
       }

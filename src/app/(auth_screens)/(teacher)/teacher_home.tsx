@@ -1,5 +1,6 @@
 import SelectStudentsModal from "@/src/components/modals/select-students.modal";
 import StudentListComponent from "@/src/components/student-list-component";
+import { objectJsonFormatter } from "@/src/helpers/objectJsonFormatter";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { useClassStore } from "@/src/stores/class.store";
 import { useStudentStore } from "@/src/stores/student.store";
@@ -14,6 +15,8 @@ const TeacherHome = () => {
     useStudentStore();
   const { addStudents } = useClassStore();
 
+  objectJsonFormatter(students);
+
   const [selectStudentModalVisible, setSelectStudentModalVisible] =
     useState(false);
 
@@ -26,7 +29,7 @@ const TeacherHome = () => {
   }, [getStudents]);
 
   const handleSelectStudents = () => {
-    getStudents();
+    getStudents(`?class=null`);
     setSelectStudentModalVisible(true);
   };
 
@@ -89,9 +92,10 @@ const TeacherHome = () => {
             </TouchableOpacity>
 
             <ScrollView contentContainerClassName="w-full pb[100px] py-12 gap-2 mt-10">
-              {students.map((student) => (
-                <StudentListComponent student={student} key={student.id} />
-              ))}
+              {teacherUser.advisory_class.students &&
+                teacherUser.advisory_class.students.map((student) => (
+                  <StudentListComponent student={student} key={student.id} />
+                ))}
             </ScrollView>
           </>
         )}

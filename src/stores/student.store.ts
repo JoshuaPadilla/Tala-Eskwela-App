@@ -7,7 +7,7 @@ interface StudentStoreState {
   loading: boolean;
   selectedStudent: Student | null;
   students: Student[];
-  getStudents: () => Promise<void>;
+  getStudents: (query?: string) => Promise<void>;
   getStudent: (student_id: string) => void;
   setStudentToRegister: (student_id: string) => void;
   updateStudents: (data: Partial<Student>) => void;
@@ -18,11 +18,11 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
   selectedStudent: null,
   loading: false,
   students: [],
-  getStudents: async () => {
+  getStudents: async (query) => {
     try {
       set({ loading: true });
       const accessToken = AsyncStorage.getItem("accessToken");
-      const res = await fetch(`${BASE_URL}students`, {
+      const res = await fetch(`${BASE_URL}students${query ? query : ""}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${accessToken}`,

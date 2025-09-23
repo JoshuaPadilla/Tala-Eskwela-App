@@ -1,6 +1,5 @@
 import { Roles } from "../enums/role.enum";
 import { Class } from "./class.interface";
-import { Course } from "./course.interface";
 import { Parent } from "./parent.interface";
 import { Teacher } from "./teacher.interface";
 
@@ -15,8 +14,7 @@ export interface Student {
   phone: string;
   grade_lvl: string;
   role: Roles;
-  classes: Class[];
+  class: Class;
   teachers: Teacher[];
-  courses: Course[];
   parent: Parent;
 }

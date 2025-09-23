@@ -19,10 +19,9 @@ const SelectStudentsModal = ({
 
   const [selectedStudents, setSeletedStudents] = useState<string[]>([]);
 
-  console.log(selectedStudents);
-
-  const handleOnSelectCallback = () => {
+  const handleOnSubmit = () => {
     onCloseCallback(selectedStudents);
+    setSeletedStudents([]);
   };
 
   const handleSelectStudent = (student_id: string) => {
@@ -35,12 +34,17 @@ const SelectStudentsModal = ({
     );
   };
 
+  const handleCloseModal = () => {
+    onClose();
+    setSeletedStudents([]);
+  };
+
   return (
     <Modal
       animationType="fade"
       visible={modalVisible}
       transparent
-      onRequestClose={onClose}
+      onRequestClose={handleCloseModal}
     >
       <View className="flex-1 bg-black-100/40 justify-center items-center">
         <View className="w-[80%] max-h-[70%] bg-white rounded-lg p-8 gap-2">
@@ -62,7 +66,7 @@ const SelectStudentsModal = ({
 
           <TouchableOpacity
             className="w-full h-14 rounded-lg my-4"
-            onPress={handleOnSelectCallback}
+            onPress={handleOnSubmit}
           >
             <LinearGradient
               colors={["#fb923c", "#22d3ee", "#fb923c", "#22d3ee"]}
