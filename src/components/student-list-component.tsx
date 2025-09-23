@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../constants/icons/icons.constant";
@@ -10,7 +11,12 @@ interface StudentListComponentProps {
 }
 
 const StudentListComponent = ({ student }: StudentListComponentProps) => {
-  const { deleteStudent } = useStudentStore();
+  const { deleteStudent, setSelectedStudent } = useStudentStore();
+
+  const handleSelectStudent = () => {
+    setSelectedStudent(student);
+    router.push("/(auth_screens)/(teacher)/selected_student");
+  };
 
   const handleDeleteStudent = async () => {
     if (!student) return;
@@ -19,7 +25,7 @@ const StudentListComponent = ({ student }: StudentListComponentProps) => {
   return (
     <TouchableOpacity
       className="w-full p-4 bg-purple-200 rounded-md"
-      onPress={() => {}}
+      onPress={handleSelectStudent}
     >
       <View className="flex-row justify-between">
         <Text>

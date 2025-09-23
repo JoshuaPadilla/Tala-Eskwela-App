@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/src/stores/auth.store";
 import { router } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const StudentHome = () => {
@@ -14,12 +14,16 @@ const StudentHome = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-center bg-white gap-10">
-      <Text>Hello {studentUser?.first_name}</Text>
-
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+    <SafeAreaView className="flex-1 p-8  ">
+      <View className="p-4 flex-row justify-between items-center">
+        <Text>Hello {studentUser?.first_name}</Text>
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="px-4 py-2 bg-danger rounded-md "
+        >
+          <Text>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

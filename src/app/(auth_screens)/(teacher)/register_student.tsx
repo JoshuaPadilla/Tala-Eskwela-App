@@ -12,6 +12,7 @@ const RegisterStudent = () => {
 
   useEffect(() => {
     socket.on("tapped", (data) => {
+      console.log("data:", data);
       setRfidUuid(data.data);
       updateStudents({ rfid_tag_uid: data.data });
     });

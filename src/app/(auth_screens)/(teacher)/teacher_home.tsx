@@ -1,6 +1,8 @@
+import socket from "@/lib/socket";
 import SelectStudentsModal from "@/src/components/modals/select-students.modal";
 import StudentListComponent from "@/src/components/student-list-component";
-import { objectJsonFormatter } from "@/src/helpers/objectJsonFormatter";
+import TeacherAttendanceComponent from "@/src/components/teacher_components/teacher_attendance_component";
+import { useAttendanceStore } from "@/src/stores/attendance.store";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { useClassStore } from "@/src/stores/class.store";
 import { useStudentStore } from "@/src/stores/student.store";
@@ -14,19 +16,24 @@ const TeacherHome = () => {
   const { students, getStudents, getStudent, selectedStudent } =
     useStudentStore();
   const { addStudents } = useClassStore();
-
-  objectJsonFormatter(students);
+  const { addAttendance, attendances } = useAttendanceStore();
 
   const [selectStudentModalVisible, setSelectStudentModalVisible] =
     useState(false);
 
   useEffect(() => {
+    socket.on("newAttendance", (data) => {
+      addAttendance(data.data);
+    });
+  }, [addAttendance]);
+
+  useEffect(() => {
     const loadStudents = async () => {
-      await getStudents();
+      await getStudents(`?class=${teacherUser?.advisory_class.id}`);
     };
 
     loadStudents();
-  }, [getStudents]);
+  }, [getStudents, teacherUser]);
 
   const handleSelectStudents = () => {
     getStudents(`?class=null`);
@@ -92,13 +99,20 @@ const TeacherHome = () => {
             </TouchableOpacity>
 
             <ScrollView contentContainerClassName="w-full pb[100px] py-12 gap-2 mt-10">
-              {teacherUser.advisory_class.students &&
-                teacherUser.advisory_class.students.map((student) => (
+              {students &&
+                students.map((student) => (
                   <StudentListComponent student={student} key={student.id} />
                 ))}
             </ScrollView>
           </>
         )}
+
+        <ScrollView contentContainerClassName="pb-[200px] p-4 gap-2">
+          {attendances &&
+            attendances.map((attendance, index) => (
+              <TeacherAttendanceComponent attendance={attendance} key={index} />
+            ))}
+        </ScrollView>
       </SafeAreaView>
     </>
   );

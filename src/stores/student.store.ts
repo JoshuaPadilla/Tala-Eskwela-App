@@ -12,6 +12,7 @@ interface StudentStoreState {
   setStudentToRegister: (student_id: string) => void;
   updateStudents: (data: Partial<Student>) => void;
   deleteStudent: (student_id: string) => Promise<void>;
+  setSelectedStudent: (student: Student) => void;
 }
 
 export const useStudentStore = create<StudentStoreState>((set) => ({
@@ -121,5 +122,8 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+  setSelectedStudent: (student) => {
+    set({ selectedStudent: student });
   },
 }));
