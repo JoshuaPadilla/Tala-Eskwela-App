@@ -1,8 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import dayjs from "dayjs";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
 import { CreateClassDto } from "../dto/create-class.dto";
+import { isBetween } from "../helpers/isBetween.helper";
 import { Class } from "../interfaces/class.interface";
+import { Schedule } from "../interfaces/schedule.interface";
 
 interface ClassStoreState {
   loading: boolean;
@@ -12,9 +15,10 @@ interface ClassStoreState {
   getClass: (class_id: string) => Promise<Class | undefined>;
   deleteClass: (class_id: string) => Promise<void>;
   addStudents: (class_id: string, student_ids: string[]) => void;
+  getCurrentClassSchedule: (class_id: string) => Promise<Schedule | undefined>;
 }
 
-export const useClassStore = create<ClassStoreState>((set) => ({
+export const useClassStore = create<ClassStoreState>((set, get) => ({
   loading: false,
   classes: [],
   createClass: async (form) => {
@@ -147,6 +151,36 @@ export const useClassStore = create<ClassStoreState>((set) => ({
       console.log(error);
     } finally {
       set({ loading: false });
+    }
+  },
+  getCurrentClassSchedule: async (class_id) => {
+    const { getClass } = get();
+
+    try {
+      const classObj = await getClass(class_id);
+
+      console.log("class", classObj?.schedules);
+
+      if (!classObj) throw new Error("No class found");
+      const currentDayOfWeek = dayjs().format("dddd").toLowerCase();
+
+      const currentScheds = classObj.schedules?.map((sched) => {
+        if (sched.day_of_week === currentDayOfWeek) {
+          return sched;
+        }
+      });
+
+      console.log("scheds", currentScheds);
+
+      if (!currentScheds) throw new Error("No sched for this time");
+
+      const currentSched = currentScheds.find((sched) =>
+        isBetween(sched?.start_time, sched?.end_time)
+      );
+
+      return currentSched;
+    } catch (error) {
+      console.log(error);
     }
   },
 }));
