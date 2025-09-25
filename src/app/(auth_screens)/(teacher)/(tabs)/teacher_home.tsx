@@ -14,7 +14,7 @@ const TeacherHome = () => {
   const { teacherUser, logout } = useAuthStore();
   const { getStudents } = useStudentStore();
   const { getCurrentClassSchedule } = useClassStore();
-  const { addAttendance } = useAttendanceStore();
+  const { addAttendance, getCurrentSchedAttendance } = useAttendanceStore();
 
   const [currentSched, setCurrentSched] = useState<Schedule | undefined>();
 
@@ -29,6 +29,8 @@ const TeacherHome = () => {
       const result = await getCurrentClassSchedule(
         teacherUser?.advisory_class.id || ""
       );
+
+      getCurrentSchedAttendance(teacherUser?.advisory_class.id || "");
 
       if (result) {
         setCurrentSched(result);

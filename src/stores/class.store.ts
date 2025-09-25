@@ -159,8 +159,6 @@ export const useClassStore = create<ClassStoreState>((set, get) => ({
     try {
       const classObj = await getClass(class_id);
 
-      console.log("class", classObj?.schedules);
-
       if (!classObj) throw new Error("No class found");
       const currentDayOfWeek = dayjs().format("dddd").toLowerCase();
 
@@ -169,8 +167,6 @@ export const useClassStore = create<ClassStoreState>((set, get) => ({
           return sched;
         }
       });
-
-      console.log("scheds", currentScheds);
 
       if (!currentScheds) throw new Error("No sched for this time");
 
