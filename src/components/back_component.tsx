@@ -7,7 +7,7 @@ import { Icons } from "../constants/icons/icons.constant";
 const BackComponent = () => {
   return (
     <TouchableOpacity
-      className="flex-row justify-between items-center py-4 w-full"
+      className="flex-row justify-between items-center py-4"
       onPress={router.back}
     >
       <Image source={Icons.back} style={{ height: 25, width: 25 }} />

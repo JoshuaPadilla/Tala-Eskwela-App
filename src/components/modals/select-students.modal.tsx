@@ -1,3 +1,4 @@
+import { Student } from "@/src/interfaces/student.interface";
 import { useStudentStore } from "@/src/stores/student.store";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
@@ -8,14 +9,16 @@ interface SelectStudentsModalProps {
   modalVisible: boolean;
   onCloseCallback: (student_ids: string[]) => void;
   onClose: () => void;
+  students: Student[];
 }
 
 const SelectStudentsModal = ({
   modalVisible,
   onCloseCallback,
   onClose,
+  students,
 }: SelectStudentsModalProps) => {
-  const { students } = useStudentStore();
+  const { loading } = useStudentStore();
 
   const [selectedStudents, setSeletedStudents] = useState<string[]>([]);
 

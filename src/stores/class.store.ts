@@ -6,6 +6,7 @@ import { CreateClassDto } from "../dto/create-class.dto";
 import { isBetween } from "../helpers/isBetween.helper";
 import { Class } from "../interfaces/class.interface";
 import { Schedule } from "../interfaces/schedule.interface";
+import { Student } from "../interfaces/student.interface";
 
 interface ClassStoreState {
   loading: boolean;
@@ -14,7 +15,10 @@ interface ClassStoreState {
   getClasses: () => void;
   getClass: (class_id: string) => Promise<Class | undefined>;
   deleteClass: (class_id: string) => Promise<void>;
-  addStudents: (class_id: string, student_ids: string[]) => void;
+  addStudents: (
+    class_id: string,
+    student_ids: string[]
+  ) => Promise<Student[] | undefined>;
   getCurrentClassSchedule: (class_id: string) => Promise<Schedule | undefined>;
 }
 
@@ -144,6 +148,7 @@ export const useClassStore = create<ClassStoreState>((set, get) => ({
       const data = await res.json();
 
       if (res.status === 201) {
+        return data as Student[];
       } else {
         console.log(res.status);
       }

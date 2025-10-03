@@ -69,7 +69,7 @@ const TeacherHome = () => {
         <View className="mt-4">
           <Text>
             Current Subject: {currentSched?.subject.name}{" "}
-            {`${timeToDisplay(currentSched?.start_time || "")} - ${timeToDisplay(currentSched?.start_time || "")}`}
+            {`${timeToDisplay(currentSched?.start_time || "")} - ${timeToDisplay(currentSched?.end_time || "")}`}
           </Text>
         </View>
       </SafeAreaView>

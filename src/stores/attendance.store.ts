@@ -1,19 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
-import { objectJsonFormatter } from "../helpers/objectJsonFormatter";
 import { Attendance } from "../interfaces/attendance.interface";
 
 interface AttendanceStoreState {
   loading: boolean;
-  attendances: Attendance[];
+  allAttendances: Attendance[];
+  currentSchedAttendance: Attendance[];
   addAttendance: (attendance: Attendance) => void;
   getCurrentSchedAttendance: (class_id: string) => void;
 }
 
 export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
   loading: false,
-  attendances: [],
+  allAttendances: [],
+  currentSchedAttendance: [],
   addAttendance: (attendance) => {
     set((state) => {
       const updatedAttendances = [...state.attendances, attendance];
@@ -39,7 +40,11 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
 
       const data = await res.json();
 
-      objectJsonFormatter(data);
+      if (res.ok) {
+        set({ currentSchedAttendance: data });
+      } else {
+        console.log("No Attendance for this schedule");
+      }
     } catch (error) {
       console.log(error);
     } finally {

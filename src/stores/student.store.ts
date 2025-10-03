@@ -7,7 +7,7 @@ interface StudentStoreState {
   loading: boolean;
   selectedStudent: Student | null;
   students: Student[];
-  getStudents: (query?: string) => Promise<void>;
+  getStudents: (query?: string) => Promise<Student[] | undefined>;
   getStudent: (student_id: string) => void;
   setStudentToRegister: (student_id: string) => void;
   updateStudents: (data: Partial<Student>) => void;
@@ -33,7 +33,7 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
       const data = await res.json();
 
       if (data) {
-        set({ students: data });
+        return data as Student[];
       } else {
         throw new Error("No students found");
       }
