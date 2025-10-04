@@ -1,4 +1,5 @@
 import socket from "@/lib/socket";
+import BackComponent from "@/src/components/back_component";
 import { useStudentStore } from "@/src/stores/student.store";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -12,7 +13,6 @@ const RegisterStudent = () => {
 
   useEffect(() => {
     socket.on("tapped", (data) => {
-      console.log("data:", data);
       setRfidUuid(data.data);
       updateStudents({ rfid_tag_uid: data.data });
     });
@@ -29,6 +29,7 @@ const RegisterStudent = () => {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
+      <BackComponent />
       <View className="p-4 bg-primary-400 rounded-md mb-10">
         <Text>{title}</Text>
       </View>

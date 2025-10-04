@@ -22,7 +22,7 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
   getStudents: async (query) => {
     try {
       set({ loading: true });
-      const accessToken = AsyncStorage.getItem("accessToken");
+      const accessToken = await AsyncStorage.getItem("accessToken");
       const res = await fetch(`${BASE_URL}students${query ? query : ""}`, {
         method: "Get",
         headers: {
@@ -46,7 +46,7 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
   getStudent: async (student_id) => {
     try {
       set({ loading: true });
-      const accessToken = AsyncStorage.getItem("accessToken");
+      const accessToken = await AsyncStorage.getItem("accessToken");
       const res = await fetch(`${BASE_URL}students/${student_id}`, {
         method: "Get",
         headers: {
@@ -96,7 +96,7 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
   deleteStudent: async (student_id: string) => {
     try {
       set({ loading: true });
-      const accessToken = AsyncStorage.getItem("accessToken");
+      const accessToken = await AsyncStorage.getItem("accessToken");
       const res = await fetch(`${BASE_URL}students/${student_id}`, {
         method: "Delete",
         headers: {

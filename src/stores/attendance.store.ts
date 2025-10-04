@@ -16,14 +16,23 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
   allAttendances: [],
   currentSchedAttendance: [],
   addAttendance: (attendance) => {
+    if (!attendance) {
+      console.warn("addAttendance called with undefined data");
+      return;
+    }
     set((state) => {
-      const updatedAttendances = [...state.attendances, attendance];
+      const safeAttendances = Array.isArray(state.allAttendances)
+        ? state.allAttendances
+        : [];
+
+      const updatedAttendances = [...safeAttendances, attendance];
 
       return {
-        attendances: updatedAttendances,
+        allAttendances: updatedAttendances,
       };
     });
   },
+
   getCurrentSchedAttendance: async (class_id) => {
     try {
       set({ loading: true });

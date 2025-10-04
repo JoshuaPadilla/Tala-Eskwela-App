@@ -45,7 +45,7 @@ export const useSubjectStore = create<SubjectStoreState>((set) => ({
     try {
       set({ loading: true });
 
-      const accessToken = AsyncStorage.getItem("accessToken");
+      const accessToken = await AsyncStorage.getItem("accessToken");
       const res = await fetch(`${BASE_URL}subject`, {
         method: "Get",
         headers: {

@@ -62,3 +62,47 @@ export function timeFormatForScheduleCreation(
     return null; // invalid format
   }
 }
+
+export function formatAttendanceDate(timestamp: Date) {
+  const dateObj = new Date(timestamp);
+
+  const options = {
+    timeZone: "Asia/Manila",
+    locale: "en-US", // Use English locale for month abbreviation (MMM)
+  };
+
+  // Get month abbreviation (MMM)
+  const month = dateObj.toLocaleDateString("en-US", {
+    ...options,
+    month: "short",
+  });
+
+  // Get day (DD) and ensure two digits
+  const day = dateObj.toLocaleDateString("en-US", {
+    ...options,
+    day: "2-digit",
+  });
+
+  // Get year (YYYY)
+  const year = dateObj.toLocaleDateString("en-US", {
+    ...options,
+    year: "numeric",
+  });
+
+  return `${month} ${day} ${year}`;
+}
+
+export function formatAttendanceTime(timestamp: Date) {
+  const dateObj = new Date(timestamp);
+
+  // Options for 12-hour format with hours, minutes, and AM/PM
+  const options = {
+    hour: "numeric" as const,
+    minute: "2-digit" as const,
+    hour12: true,
+    timeZone: "Asia/Manila",
+  };
+
+  // The locale ('en-US') ensures 'AM'/'PM' are used.
+  return dateObj.toLocaleTimeString("en-US", options);
+}

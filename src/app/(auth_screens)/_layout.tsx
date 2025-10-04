@@ -22,7 +22,7 @@ const AuthScreensLayout = () => {
   }, [teacherUser]);
 
   useEffect(() => {
-    if (socket.connected && teacherUser) {
+    if (socket.connected && teacherUser && teacherUser.advisory_class) {
       socket.emit("join_class", { class_id: teacherUser.advisory_class.id });
     }
   }, [teacherUser]);

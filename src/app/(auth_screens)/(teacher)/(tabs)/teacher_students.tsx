@@ -57,8 +57,6 @@ const TeacherStudents = () => {
           `?class=${teacherUser?.advisory_class.id}`
       );
 
-      console.log(result);
-
       if (result) {
         setStudents(result);
       }
