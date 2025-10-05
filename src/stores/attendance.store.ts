@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
+import { objectJsonFormatter } from "../helpers/objectJsonFormatter";
 import { Attendance } from "../interfaces/attendance.interface";
 
 interface AttendanceStoreState {
@@ -9,6 +10,7 @@ interface AttendanceStoreState {
   currentSchedAttendance: Attendance[];
   addAttendance: (attendance: Attendance) => void;
   getCurrentSchedAttendance: (class_id: string) => void;
+  getAttendanceByCurrentSchedule: (class_id: string, sched_id: string) => void;
 }
 
 export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
@@ -55,7 +57,39 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
         console.log("No Attendance for this schedule");
       }
     } catch (error) {
-      console.log(error);
+      console.log("getCurrentSchedAttendance:", error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  getAttendanceByCurrentSchedule: async (class_id, sched_id) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+
+      const res = await fetch(
+        `${BASE_URL}attendance/bySched/${class_id}?schedule_id=${sched_id}`,
+        {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log(objectJsonFormatter(data));
+      } else {
+        console.log(res.status, res.ok);
+        console.log("No Attendance for this schedule");
+      }
+    } catch (error) {
+      console.log("getCurrentSchedAttendance:", error);
     } finally {
       set({ loading: false });
     }

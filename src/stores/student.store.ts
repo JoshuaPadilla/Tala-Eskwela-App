@@ -13,6 +13,7 @@ interface StudentStoreState {
   updateStudents: (data: Partial<Student>) => void;
   deleteStudent: (student_id: string) => Promise<void>;
   setSelectedStudent: (student: Student) => void;
+  addParent: (student_id: string, parent_id: string) => void;
 }
 
 export const useStudentStore = create<StudentStoreState>((set) => ({
@@ -125,5 +126,41 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
   },
   setSelectedStudent: (student) => {
     set({ selectedStudent: student });
+  },
+  addParent: async (student_id, parent_id) => {
+    console.log(student_id, parent_id);
+    try {
+      set({ loading: true });
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}students/addParent`, {
+        method: "Post",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ student_id, parent_id }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        set((state) => {
+          if (!state.selectedStudent) return {};
+          const updatedStudent = {
+            ...state.selectedStudent,
+            parent: data,
+            id: state.selectedStudent.id as string, // ensure id is string
+          };
+
+          return { selectedStudent: updatedStudent };
+        });
+      } else {
+        throw new Error("No students found");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
   },
 }));

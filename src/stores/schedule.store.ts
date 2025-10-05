@@ -9,6 +9,7 @@ interface ScheduleStoreState {
   schedules: Schedule[];
   createSchedule: (form: CreateScheduleDto) => void;
   getSchedules: () => void;
+  getSchedule: (sched_id: string) => Promise<Schedule | undefined>;
   getTodaysSchedules: (class_id: string) => Promise<Schedule[] | []>;
   deleteSchedule: (id: string) => Promise<void>;
 }
@@ -39,6 +40,34 @@ export const useScheduleStore = create<ScheduleStoreState>((set) => ({
       } else {
         console.log(res.status);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  getSchedule: async (sched_id) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}schedule/${sched_id}`, {
+        method: "Get",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        return data as Schedule;
+      } else {
+        console.log(res.status);
+      }
+
+      return undefined;
     } catch (error) {
       console.log(error);
     } finally {

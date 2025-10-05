@@ -10,7 +10,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherHome = () => {
-  console.log("rendering teacher home");
   const { teacherUser, logout } = useAuthStore();
   const { getCurrentClassSchedule } = useClassStore();
   const { addAttendance, getCurrentSchedAttendance } = useAttendanceStore();

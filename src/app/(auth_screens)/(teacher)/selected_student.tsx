@@ -8,7 +8,8 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SelectedStudent = () => {
-  const { selectedStudent, setStudentToRegister } = useStudentStore();
+  const { selectedStudent, setStudentToRegister, addParent } =
+    useStudentStore();
 
   const { getParents } = useParentStore();
 
@@ -29,7 +30,11 @@ const SelectedStudent = () => {
     setAddParentModalVisible(false);
   };
 
-  const handleAddParentCallback = (parentId: string) => {};
+  const handleAddParentCallback = (parentId: string) => {
+    if (selectedStudent) {
+      addParent(selectedStudent.id, parentId);
+    }
+  };
 
   return (
     <>
@@ -48,6 +53,8 @@ const SelectedStudent = () => {
             {selectedStudent?.first_name} {selectedStudent?.middle_name}{" "}
             {selectedStudent?.last_name}
           </Text>
+
+          <Text>Parent: {selectedStudent?.parent?.first_name}</Text>
         </View>
 
         <TouchableOpacity

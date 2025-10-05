@@ -32,11 +32,7 @@ const TeacherAttendance = () => {
       <ScrollView contentContainerClassName="gap-2 pb-[200px]">
         {todaysSchedules &&
           todaysSchedules.map((sched, idx) => (
-            <TeacherScheduleComponent
-              key={sched.id || idx}
-              schedule={sched}
-              onPress={() => {}}
-            />
+            <TeacherScheduleComponent key={sched.id || idx} schedule={sched} />
           ))}
       </ScrollView>
     </SafeAreaView>

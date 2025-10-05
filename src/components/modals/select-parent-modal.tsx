@@ -1,14 +1,6 @@
 import { useParentStore } from "@/src/stores/parent.store";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import {
-  ActivityIndicator,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
 import ParentModalListComponent from "../parent_modal_list_component";
 
 interface SelectParentModalProps {
@@ -24,7 +16,12 @@ const SelectParentModal = ({
 }: SelectParentModalProps) => {
   const { parents, loading } = useParentStore();
 
-  console.log(parents);
+  const [selectedParentId, setSelectedParentId] = useState("");
+
+  const handleOnCloseCallback = (parent_id: string) => {
+    onCloseCallback(parent_id);
+    onClose();
+  };
 
   return (
     <Modal
@@ -50,28 +47,11 @@ const SelectParentModal = ({
                   <ParentModalListComponent
                     parent={parent}
                     key={parent.id || index}
-                    onSelect={() => {}}
+                    onSelect={handleOnCloseCallback}
                   />
                 ))}
             </ScrollView>
           )}
-
-          <TouchableOpacity
-            className="w-full h-14 rounded-lg my-4"
-            onPress={() => {}}
-          >
-            <LinearGradient
-              colors={["#fb923c", "#22d3ee", "#fb923c", "#22d3ee"]}
-              start={{ x: -1, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              className="w-full h-full items-center justify-center rounded-lg overflow-hidden self-end"
-              style={{ borderRadius: 10 }}
-            >
-              <Text className="text-primary-400 font-semibold text-lg">
-                Submit
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
         </View>
       </View>
     </Modal>

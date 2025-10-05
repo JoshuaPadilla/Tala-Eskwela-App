@@ -11,8 +11,6 @@ export default function RootLayout() {
     checkAuth();
   }, [checkAuth]);
 
-  console.log(user);
-
   useEffect(() => {
     if (user) {
       switch (user.role) {

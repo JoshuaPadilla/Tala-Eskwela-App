@@ -3,11 +3,18 @@ import { Text, TouchableOpacity } from "react-native";
 import { Parent } from "../interfaces/parent.interface";
 interface props {
   parent: Parent;
-  onSelect: () => void;
+  onSelect: (parent_id: string) => void;
 }
-const ParentModalListComponent = ({ parent }: props) => {
+const ParentModalListComponent = ({ parent, onSelect }: props) => {
+  const handleOnSelect = () => {
+    onSelect(parent.id || "");
+  };
+
   return (
-    <TouchableOpacity className="p-4 bg-cyan-200 rounded-md">
+    <TouchableOpacity
+      className="p-4 bg-cyan-200 rounded-md"
+      onPress={handleOnSelect}
+    >
       <Text>
         {parent.first_name} {parent.last_name}
       </Text>
