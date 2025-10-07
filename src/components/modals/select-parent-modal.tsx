@@ -1,6 +1,13 @@
 import { useParentStore } from "@/src/stores/parent.store";
 import React, { useState } from "react";
-import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import ParentModalListComponent from "../parent_modal_list_component";
 
 interface SelectParentModalProps {
@@ -14,7 +21,7 @@ const SelectParentModal = ({
   onClose,
   onCloseCallback,
 }: SelectParentModalProps) => {
-  const { parents, loading } = useParentStore();
+  const { parentsForAddingStudents, loading } = useParentStore();
 
   const [selectedParentId, setSelectedParentId] = useState("");
 
@@ -32,8 +39,12 @@ const SelectParentModal = ({
     >
       <View className="flex-1 bg-black-100/40 justify-center items-center">
         <View className="w-[80%] max-h-[70%] bg-white rounded-lg p-8 gap-2">
-          <View>
+          <View className="flex-row justify-between items-center">
             <Text>Select parent to add</Text>
+
+            <Pressable onPress={onClose} hitSlop={5}>
+              <Text>x</Text>
+            </Pressable>
           </View>
 
           {loading ? (
@@ -42,8 +53,8 @@ const SelectParentModal = ({
             </View>
           ) : (
             <ScrollView contentContainerClassName="pb-[200px] py-4 gap-4">
-              {parents.length > 0 &&
-                parents.map((parent, index) => (
+              {parentsForAddingStudents.length > 0 &&
+                parentsForAddingStudents.map((parent, index) => (
                   <ParentModalListComponent
                     parent={parent}
                     key={parent.id || index}

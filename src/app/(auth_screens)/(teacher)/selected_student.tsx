@@ -11,7 +11,7 @@ const SelectedStudent = () => {
   const { selectedStudent, setStudentToRegister, addParent } =
     useStudentStore();
 
-  const { getParents } = useParentStore();
+  const { getParentsForAddingStudents } = useParentStore();
 
   const [addParentModalVisible, setAddParentModalVisible] = useState(false);
 
@@ -22,8 +22,10 @@ const SelectedStudent = () => {
   };
 
   const handleAddParent = () => {
+    if (!selectedStudent) return;
     setAddParentModalVisible(true);
-    getParents();
+
+    getParentsForAddingStudents(selectedStudent.id);
   };
 
   const handleAddParentModalClose = () => {
