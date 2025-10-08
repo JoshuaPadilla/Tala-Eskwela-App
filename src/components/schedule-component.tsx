@@ -1,21 +1,26 @@
-import { Image } from "expo-image";
 import React, { useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import { Icons } from "../constants/icons/icons.constant";
+import { Platform, TouchableOpacity, View } from "react-native";
+import { TeacherIcons } from "../constants/icons/teacher.constants";
+import { shadow } from "../helpers/shadow";
 import { timeToDisplay } from "../helpers/timeToString.helper";
 import { Schedule } from "../interfaces/schedule.interface";
 import { useScheduleStore } from "../stores/schedule.store";
+import ImageComponent from "./image_component";
+import H1Text from "./text_components/h1";
+import H2Text from "./text_components/h2";
 
 interface ScheduleComponentProps {
   schedule: Schedule;
+  onPress?: () => void;
 }
 
 const ScheduleComponent = ({ schedule }: ScheduleComponentProps) => {
+  const shadowStyle = shadow(Platform.OS);
+
   const [loading, setLoading] = useState(false);
   const { deleteSchedule } = useScheduleStore();
 
   const handleDelete = async () => {
-    console.log("hello Woasda");
     try {
       setLoading(true);
       await deleteSchedule(schedule.id);
@@ -27,20 +32,23 @@ const ScheduleComponent = ({ schedule }: ScheduleComponentProps) => {
   };
 
   return (
-    <TouchableOpacity className="p-2 bg-cyan-200 rounded-lg">
-      <View className="flex-row justify-between">
-        <Pressable hitSlop={5} onPress={handleDelete}>
-          <Image
-            source={Icons.trash}
-            style={{ height: 15, width: 15, tintColor: "#F75555" }}
-          />
-        </Pressable>
-      </View>
+    <TouchableOpacity
+      className="flex-row gap-4 p-4 bg-white rounded-lg w-full"
+      style={shadowStyle}
+    >
+      <ImageComponent
+        source={TeacherIcons.students_icon}
+        radius={5}
+        size={40}
+      />
 
-      <Text>Subject name: {schedule.subject.name}</Text>
-      <Text>Start time: {timeToDisplay(schedule.start_time)}</Text>
-      <Text>End time: {timeToDisplay(schedule.end_time)}</Text>
-      <Text>Every: {schedule.day_of_week}</Text>
+      <View className="">
+        <H2Text value={schedule.subject.name} />
+        <H1Text
+          value={`${timeToDisplay(schedule.start_time)} - ${timeToDisplay(schedule.end_time)}`}
+          additionalClassname="text-black-100/50"
+        />
+      </View>
     </TouchableOpacity>
   );
 };
