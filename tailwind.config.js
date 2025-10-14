@@ -8,6 +8,20 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        "poppins-bold": ["Poppins-Bold", "sans-serif"],
+        "poppins-extrabold": ["Poppins-ExtraBold", "sans-serif"],
+        "poppins-light": ["Poppins-Light", "sans-serif"],
+        "poppins-medium": ["Poppins-Medium", "sans-serif"],
+        "poppins-regular": ["Poppins-Regular", "sans-serif"],
+        "poppins-semibold": ["Poppins-SemiBold", "sans-serif"],
+        "rubik-bold": ["Rubik-Bold", "sans-serif"],
+        "rubik-extrabold": ["Rubik-ExtraBold", "sans-serif"],
+        "rubik-light": ["Rubik-Light", "sans-serif"],
+        "rubik-medium": ["Rubik-Medium", "sans-serif"],
+        "rubik-regular": ["Rubik-Regular", "sans-serif"],
+        "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
+      },
       colors: {
         primary: {
           100: "#124170",

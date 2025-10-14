@@ -15,9 +15,13 @@ const TeacherAttendanceComponent = ({
 }: TeacherAttendanceComponentProps) => {
   return (
     <View className="p-4 bg-cyan-200 rounded-lg">
-      <Text>
-        {attendance.student?.first_name} {attendance.student.last_name}
-      </Text>
+      <View className="flex-row gap-2 items-center">
+        <Text>
+          {attendance.student?.first_name} {attendance.student.last_name}
+        </Text>
+
+        <Text>{attendance.status}</Text>
+      </View>
 
       <Text>
         {formatAttendanceDate(attendance.timestamp)} -{" "}

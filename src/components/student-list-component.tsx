@@ -42,7 +42,6 @@ const StudentListComponent = ({ student }: StudentListComponentProps) => {
       <Text>{student.phone}</Text>
     </TouchableOpacity>
   );
-  
 };
 
 export default StudentListComponent;

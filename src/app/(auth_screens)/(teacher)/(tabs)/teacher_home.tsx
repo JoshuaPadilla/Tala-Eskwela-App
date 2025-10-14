@@ -1,42 +1,54 @@
-import socket from "@/lib/socket";
-import { timeToDisplay } from "@/src/helpers/timeToString.helper";
+import ImageComponent from "@/src/components/image_component";
+import ScheduleComponent from "@/src/components/schedule-component";
+import H1Text from "@/src/components/text_components/h1";
+import H3Text from "@/src/components/text_components/h3";
+import H4Text from "@/src/components/text_components/h4";
+import { TeacherIcons } from "@/src/constants/icons/teacher.constants";
 import { Schedule } from "@/src/interfaces/schedule.interface";
-import { useAttendanceStore } from "@/src/stores/attendance.store";
 import { useAuthStore } from "@/src/stores/auth.store";
-import { useClassStore } from "@/src/stores/class.store";
+import { useScheduleStore } from "@/src/stores/schedule.store";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherHome = () => {
   const { teacherUser, logout } = useAuthStore();
-  const { getCurrentClassSchedule } = useClassStore();
-  const { addAttendance, getCurrentSchedAttendance } = useAttendanceStore();
+  const { getTodaysSchedules } = useScheduleStore();
 
-  const [currentSched, setCurrentSched] = useState<Schedule | undefined>();
-
-  useEffect(() => {
-    socket.on("newAttendance", (data) => {
-      addAttendance(data.data);
-    });
-  }, [addAttendance]);
+  const [todaysSchedule, setTodaysSchedule] = useState<Schedule[]>([]);
+  const [loadingSched, setLoadingSched] = useState(false);
 
   useEffect(() => {
     const getCurrentSched = async () => {
-      const result = await getCurrentClassSchedule(
-        teacherUser?.advisory_class?.id || ""
-      );
+      try {
+        setLoadingSched(true);
 
-      getCurrentSchedAttendance(teacherUser?.advisory_class?.id || "");
+        if (!teacherUser?.advisory_class) return;
 
-      if (result) {
-        setCurrentSched(result);
+        const result = await getTodaysSchedules(
+          teacherUser?.advisory_class.id || ""
+        );
+
+        if (!result) return;
+
+        setTodaysSchedule(result);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoadingSched(false);
       }
     };
 
     getCurrentSched();
-  }, [getCurrentClassSchedule, teacherUser]);
+  }, [getTodaysSchedules, teacherUser]);
 
   const handleLogout = () => {
     logout();
@@ -46,35 +58,93 @@ const TeacherHome = () => {
 
   return (
     <>
-      <SafeAreaView className="flex-1 p-8">
-        <View className="flex-row justify-between">
-          <TouchableOpacity
-            onPress={handleLogout}
-            className="px-4 py-2 items-center justify-center bg-danger rounded-md mb-4"
-          >
+      <LinearGradient
+        colors={["#22d3ee", "#f1f5f9"]}
+        start={{ x: 0, y: 0 }}
+        // 3. Define the ending point of the gradient
+        // [0, 1] is bottom-left (creating a vertical gradient)
+        end={{ x: 0, y: 0.3 }}
+        className="flex-1 "
+      >
+        <SafeAreaView className="flex-1 px-6 py-12">
+          <H4Text
+            value={`Hello Teacher ${teacherUser?.first_name}`}
+            additionalClassname="text-orange-400"
+          />
+
+          {/* quick Insights */}
+          <View className="flex-row mt-8 justify-between my-4">
+            {/* Subjects */}
+            <View className="bg-white p-4 rounded-lg items-center w-[48%]">
+              <View className="flex-row gap-2 items-center">
+                <ImageComponent
+                  source={TeacherIcons.subjects_icon}
+                  size={40}
+                  radius={9999}
+                />
+
+                <View>
+                  <H1Text
+                    value="Total Subjects"
+                    additionalClassname="text-orange-400"
+                  />
+                  <H1Text
+                    value="in this Class:"
+                    additionalClassname="text-orange-400"
+                  />
+                </View>
+              </View>
+
+              <H4Text value={"8"} additionalClassname="text-orange-400" />
+            </View>
+
+            {/* Students */}
+            <View className="bg-white p-4 rounded-lg items-center w-[48%]">
+              <View className="flex-row gap-2 items-center">
+                <ImageComponent
+                  source={TeacherIcons.students_icon}
+                  size={40}
+                  radius={9999}
+                />
+
+                <View>
+                  <H1Text
+                    value="Total Enrolled:"
+                    additionalClassname="text-orange-400"
+                  />
+                  <H1Text
+                    value="Students:"
+                    additionalClassname="text-orange-400"
+                  />
+                </View>
+              </View>
+
+              <H4Text value={"2 "} additionalClassname="text-orange-400" />
+            </View>
+          </View>
+          <Pressable onPress={handleLogout}>
             <Text>Logout</Text>
-          </TouchableOpacity>
-        </View>
+          </Pressable>
+          {/* Todays Schedule */}
 
-        {teacherUser?.advisory_class && (
-          <View className="">
-            <Text>Grade {teacherUser?.advisory_class?.grade_lvl}</Text>
-            <Text>Section {teacherUser?.advisory_class?.section}</Text>
-          </View>
-        )}
+          <H3Text value="Todays Schedule:" additionalClassname="text-black" />
 
-        <Text>Hello {teacherUser?.first_name}</Text>
-        <Text>students</Text>
-
-        {teacherUser?.advisory_class && (
-          <View className="mt-4">
-            <Text>
-              Current Subject: {currentSched?.subject.name}{" "}
-              {`${timeToDisplay(currentSched?.start_time || "")} - ${timeToDisplay(currentSched?.end_time || "")}`}
-            </Text>
-          </View>
-        )}
-      </SafeAreaView>
+          <ScrollView contentContainerClassName="pb-[100px] py-4 items-center px-2 gap-2">
+            {loadingSched ? (
+              <ActivityIndicator size={"large"} className="my-4" />
+            ) : todaysSchedule.length > 0 ? (
+              todaysSchedule.map((sched) => (
+                <ScheduleComponent schedule={sched} key={sched.id} />
+              ))
+            ) : (
+              <H3Text
+                value="No Schedule for today"
+                additionalClassname="text-black-100/50 my-8"
+              />
+            )}
+          </ScrollView>
+        </SafeAreaView>
+      </LinearGradient>
     </>
   );
 };

@@ -1,6 +1,8 @@
 import { ImageSourcePropType } from "react-native";
 import app_logo from "../../../assets/icons/app_logo.png";
+import back_cyan from "../../../assets/icons/back_cyan.png";
 import back from "../../../assets/icons/back_green.png";
+import back_white from "../../../assets/icons/back_white.png";
 import plus from "../../../assets/icons/plus_icon.png";
 import edit from "../../../assets/icons/profile_edit.png";
 import profile from "../../../assets/icons/profile_placeholder_icon.png";
@@ -19,6 +21,8 @@ interface IconsState {
   plus: ImageSourcePropType;
   profile: ImageSourcePropType;
   edit: ImageSourcePropType;
+  back_cyan: ImageSourcePropType;
+  back_white: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -31,4 +35,6 @@ export const Icons: IconsState = {
   plus,
   profile,
   edit,
+  back_cyan,
+  back_white,
 };

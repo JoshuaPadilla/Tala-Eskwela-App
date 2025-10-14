@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
-import { objectJsonFormatter } from "../helpers/objectJsonFormatter";
 import { Attendance } from "../interfaces/attendance.interface";
 
 interface AttendanceStoreState {
@@ -83,7 +82,7 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
       const data = await res.json();
 
       if (res.ok) {
-        console.log(objectJsonFormatter(data));
+        set({ currentSchedAttendance: data });
       } else {
         console.log(res.status, res.ok);
         console.log("No Attendance for this schedule");

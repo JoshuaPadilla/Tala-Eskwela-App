@@ -11,6 +11,7 @@ interface StudentStoreState {
   getStudent: (student_id: string) => void;
   setStudentToRegister: (student_id: string) => void;
   updateStudents: (data: Partial<Student>) => void;
+  updateSelectedStudent: (data: Partial<Student>) => void;
   deleteStudent: (student_id: string) => Promise<void>;
   setSelectedStudent: (student: Student) => void;
   addParent: (student_id: string, parent_id: string) => void;
@@ -145,11 +146,16 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
 
       if (res.ok) {
         set((state) => {
-          if (!state.selectedStudent) return {};
-          const updatedStudent = {
+          if (
+            !state.selectedStudent ||
+            typeof state.selectedStudent.id !== "string"
+          ) {
+            return { selectedStudent: null };
+          }
+          const updatedStudent: Student = {
             ...state.selectedStudent,
             parent: data,
-            id: state.selectedStudent.id as string, // ensure id is string
+            id: state.selectedStudent.id ?? "",
           };
 
           return { selectedStudent: updatedStudent };
@@ -162,5 +168,11 @@ export const useStudentStore = create<StudentStoreState>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+  updateSelectedStudent: (data) => {
+    set((state) => {
+      const updatedStudent = { ...state.selectedStudent, ...data } as Student;
+      return { selectedStudent: updatedStudent };
+    });
   },
 }));

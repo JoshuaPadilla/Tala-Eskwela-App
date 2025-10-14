@@ -15,18 +15,20 @@ const TabIcon = ({
   indicatorNumber?: number;
 }) => {
   return (
-    <View className={`flex-1 flex-col`}>
+    <View className="flex-1 mt-3 flex flex-col items-center">
       {icon && (
         <Image
           source={icon}
-          tintColor={focused ? "#73C088" : "#666876"}
+          tintColor={focused ? "#22d3ee" : "#666876"}
           className="size-6"
           contentFit="contain"
         />
       )}
       <Text
         className={`${
-          focused ? "text-white" : "text-black-200 font-semibold"
+          focused
+            ? "text-cyan-400 font-poppins-medium"
+            : "text-black-200 font-poppins-regular"
         } text-xs w-full text-center mt-1`}
       >
         {title}
@@ -43,15 +45,10 @@ export default function TabLayout() {
         screenOptions={{
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: "rgb(165 243 252 / 0.5)",
+            backgroundColor: "#FFFFFF",
             position: "absolute",
-            alignItems: "center",
-            justifyContent: "center",
-            borderTopWidth: 1,
-            height: 60,
-            borderRadius: 9999,
-            marginBottom: 30,
-            marginHorizontal: 20,
+            borderTopColor: "#0061FF1A",
+            height: 70,
           },
         }}
       >

@@ -1,17 +1,19 @@
 import BackComponent from "@/src/components/back_component";
+import TeacherAttendanceComponent from "@/src/components/teacher_components/teacher_attendance_component";
 import { timeToDisplay } from "@/src/helpers/timeToString.helper";
 import { Schedule } from "@/src/interfaces/schedule.interface";
 import { useAttendanceStore } from "@/src/stores/attendance.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ViewSchedule = () => {
   const { schedule_id } = useLocalSearchParams();
   const { getSchedule, loading } = useScheduleStore();
-  const { getAttendanceByCurrentSchedule } = useAttendanceStore();
+  const { getAttendanceByCurrentSchedule, currentSchedAttendance } =
+    useAttendanceStore();
 
   const [selectedSched, setSelectedSched] = useState<Schedule | undefined>(
     undefined
@@ -50,6 +52,13 @@ const ViewSchedule = () => {
               {timeToDisplay(selectedSched?.end_time || "")}
             </Text>
           </View>
+
+          <ScrollView contentContainerClassName="pb-[100px] gap-2">
+            {currentSchedAttendance.length > 0 &&
+              currentSchedAttendance.map((att) => (
+                <TeacherAttendanceComponent attendance={att} key={att.id} />
+              ))}
+          </ScrollView>
         </View>
       )}
     </SafeAreaView>

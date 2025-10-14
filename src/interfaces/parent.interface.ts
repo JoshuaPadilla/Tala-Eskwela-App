@@ -7,6 +7,7 @@ export interface Parent {
   first_name: string;
   last_name: string;
   middle_name: string;
+  profileUrl?: string;
   email: string;
   password: string;
   phone: string;
