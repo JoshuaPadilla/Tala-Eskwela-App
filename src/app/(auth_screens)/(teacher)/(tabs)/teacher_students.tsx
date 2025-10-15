@@ -16,8 +16,6 @@ const TeacherStudents = () => {
 
   const [addStudentsModalVisible, setAddStudentsModalVisible] = useState(false);
 
-  const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
-
   const [students, setStudents] = useState<Student[] | []>([]);
   const [availStudents, setAvailStudents] = useState<Student[] | []>([]);
 
@@ -51,6 +49,8 @@ const TeacherStudents = () => {
   };
 
   useEffect(() => {
+    if (!teacherUser?.advisory_class) return;
+
     const loadStudents = async () => {
       const result = await getStudents(
         teacherUser?.advisory_class.id &&
@@ -87,7 +87,7 @@ const TeacherStudents = () => {
 
         <Text className="text-lg font-bold">Students:</Text>
 
-        <ScrollView>
+        <ScrollView contentContainerClassName="gap-2">
           {students &&
             students.map((student, idx) => {
               return (

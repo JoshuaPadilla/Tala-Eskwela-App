@@ -1,5 +1,6 @@
 import BackComponent from "@/src/components/back_component";
 import SelectParentModal from "@/src/components/modals/select-parent-modal";
+import { Icons } from "@/src/constants/icons/icons.constant";
 import { useParentStore } from "@/src/stores/parent.store";
 import { useStudentStore } from "@/src/stores/student.store";
 import { useUploadStore } from "@/src/stores/upload.store";
@@ -7,7 +8,7 @@ import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const blurhash =
@@ -16,6 +17,8 @@ const blurhash =
 const SelectedStudent = () => {
   const { selectedStudent, setStudentToRegister, addParent } =
     useStudentStore();
+
+  const { deleteStudent } = useStudentStore();
 
   const { getParentsForAddingStudents } = useParentStore();
   const { uploadProfile } = useUploadStore();
@@ -84,6 +87,13 @@ const SelectedStudent = () => {
     }
   };
 
+  const handleDeleteStudent = async () => {
+    if (!selectedStudent) return;
+    await deleteStudent(selectedStudent.id || "");
+
+    router.back();
+  };
+
   return (
     <>
       <SelectParentModal
@@ -94,6 +104,13 @@ const SelectedStudent = () => {
       <SafeAreaView className="flex-1 p-8 gap-4">
         <View className="flex-row justify-between items-center">
           <BackComponent />
+
+          <Pressable hitSlop={5} onPress={handleDeleteStudent}>
+            <Image
+              source={Icons.trash}
+              style={{ height: 15, width: 15, tintColor: "#F75555" }}
+            />
+          </Pressable>
         </View>
 
         <View className="flex-row gap-2">

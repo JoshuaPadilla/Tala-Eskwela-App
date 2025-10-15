@@ -1,5 +1,4 @@
 import { Student } from "@/src/interfaces/student.interface";
-import { useStudentStore } from "@/src/stores/student.store";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -18,8 +17,6 @@ const SelectStudentsModal = ({
   onClose,
   students,
 }: SelectStudentsModalProps) => {
-  const { loading } = useStudentStore();
-
   const [selectedStudents, setSeletedStudents] = useState<string[]>([]);
 
   const handleOnSubmit = () => {
@@ -44,7 +41,7 @@ const SelectStudentsModal = ({
 
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       visible={modalVisible}
       transparent
       onRequestClose={handleCloseModal}
