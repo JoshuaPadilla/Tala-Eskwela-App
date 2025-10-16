@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/app_icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -39,6 +39,7 @@
       [
         "expo-notifications",
         {
+          "icon": "./assets/icons/notif_icon.png",
           "color": "#ffffff",
           "defaultChannel": "default",
           "enableBackgroundRemoteNotifications": true

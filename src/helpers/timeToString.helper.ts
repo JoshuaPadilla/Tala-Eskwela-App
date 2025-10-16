@@ -1,3 +1,4 @@
+// accepts time string in 24 hours format (hh:mm:ss) -> "14:20:00"
 export const timeToDisplay = (timeString: string): string | null => {
   if (!timeString || typeof timeString !== "string") return null;
 
