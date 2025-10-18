@@ -1,8 +1,7 @@
-import {
-  formatAttendanceDate,
-  formatAttendanceTime,
-} from "@/src/helpers/timeToString.helper";
+import { Icons } from "@/src/constants/icons/icons.constant";
+import { formatAttendanceTime } from "@/src/helpers/timeToString.helper";
 import { Attendance } from "@/src/interfaces/attendance.interface";
+import { Image } from "expo-image";
 import React from "react";
 import { Text, View } from "react-native";
 
@@ -13,20 +12,32 @@ interface TeacherAttendanceComponentProps {
 const TeacherAttendanceComponent = ({
   attendance,
 }: TeacherAttendanceComponentProps) => {
-  return (
-    <View className="p-4 bg-cyan-200 rounded-lg">
-      <View className="flex-row gap-2 items-center">
-        <Text>
-          {attendance.student?.first_name} {attendance.student.last_name}
-        </Text>
+  const student = attendance.student;
+  const fullName = `${student.first_name} ${student.middle_name.charAt(0)}. ${student.last_name}`;
 
-        <Text>{attendance.status}</Text>
+  return (
+    <View
+      className="flex-row px-2 py-4 gap-4 rounded-lg border-t-black-100/60"
+      style={{ borderTopWidth: 0.5 }}
+    >
+      <View className="size-[50px] items-center justify-center">
+        <Image
+          source={student.profileUrl}
+          style={{ height: "100%", width: "100%", borderRadius: 999 }}
+        />
       </View>
 
-      <Text>
-        {formatAttendanceDate(attendance.timestamp)} -{" "}
-        {formatAttendanceTime(attendance.timestamp)}
-      </Text>
+      <View className="">
+        <Text className="font-poppins-bold text-md">{fullName}</Text>
+        <Text className="font-rubik-medium text-sm">{student.email}</Text>
+      </View>
+
+      <View className="flex-row flex-1 items-baseline justify-end gap-2 pr-4">
+        <Image source={Icons.time_in} style={{ height: 15, width: 15 }} />
+        <Text className="font-poppins-semibold text-sm">
+          {formatAttendanceTime(attendance.timestamp)}
+        </Text>
+      </View>
     </View>
   );
 };
