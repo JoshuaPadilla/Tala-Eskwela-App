@@ -1,3 +1,4 @@
+import { TeacherTabIcons } from "@/src/constants/icons/teacher.constants";
 import { Image } from "expo-image";
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -7,20 +8,21 @@ const TabIcon = ({
   focused,
   icon,
   title,
-  indicatorNumber,
 }: {
   focused: boolean;
   icon?: any;
   title: string;
   indicatorNumber?: number;
 }) => {
+  const iconSize = focused ? 20 : 18;
+
   return (
-    <View className="flex-1 mt-3 flex flex-col items-center">
+    <View className="flex-1 mt-3 flex flex-col items-center ">
       {icon && (
         <Image
           source={icon}
           tintColor={focused ? "#22d3ee" : "#666876"}
-          className="size-6"
+          style={{ width: iconSize, height: iconSize }}
           contentFit="contain"
         />
       )}
@@ -60,7 +62,7 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <TabIcon
-                // icon={tab_icons.tab_home}
+                icon={TeacherTabIcons.tab_home}
                 focused={focused}
                 title="Home"
               />
@@ -76,7 +78,7 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <TabIcon
-                // icon={tab_icons.tab_home}
+                icon={TeacherTabIcons.tab_attendance}
                 focused={focused}
                 title="Attendance"
               />
@@ -92,7 +94,7 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <TabIcon
-                // icon={tab_icons.tab_home}
+                icon={TeacherTabIcons.tab_students}
                 focused={focused}
                 title="Students"
               />
@@ -108,7 +110,7 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <TabIcon
-                // icon={tab_icons.tab_home}
+                icon={TeacherTabIcons.tab_insights}
                 focused={focused}
                 title="Insights"
               />
@@ -124,7 +126,7 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <TabIcon
-                // icon={tab_icons.tab_home}
+                icon={TeacherTabIcons.tab_subjects}
                 focused={focused}
                 title="Subjects"
               />
