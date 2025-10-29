@@ -1,6 +1,7 @@
 import { ImageSourcePropType } from "react-native";
 import absent from "../../../assets/icons/absent_icon.png";
 import app_logo from "../../../assets/icons/app_logo.png";
+import arrow_right from "../../../assets/icons/arrow_right.png";
 import back_cyan from "../../../assets/icons/back_cyan.png";
 import back from "../../../assets/icons/back_green.png";
 import back_white from "../../../assets/icons/back_white.png";
@@ -13,6 +14,7 @@ import profile from "../../../assets/icons/profile_placeholder_icon.png";
 import parent from "../../../assets/icons/role_selection/parent.png";
 import student from "../../../assets/icons/role_selection/student.png";
 import teacher from "../../../assets/icons/role_selection/teacher.png";
+import search_bar from "../../../assets/icons/search_bar_icon.png";
 import time_in from "../../../assets/icons/time_in.png";
 import trash from "../../../assets/icons/trash.png";
 
@@ -33,6 +35,8 @@ interface IconsState {
   absent: ImageSourcePropType;
   options: ImageSourcePropType;
   profile_placeholder: ImageSourcePropType;
+  search_bar: ImageSourcePropType;
+  arrow_right: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -52,4 +56,6 @@ export const Icons: IconsState = {
   absent,
   options,
   profile_placeholder,
+  search_bar,
+  arrow_right,
 };
