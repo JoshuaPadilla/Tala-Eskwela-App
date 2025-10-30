@@ -27,7 +27,6 @@ const AdminHome = () => {
   };
 
   const handleLogout = () => {
-    console.log("logout");
     logout();
   };
 

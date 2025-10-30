@@ -7,16 +7,18 @@ import { Schedule } from "../interfaces/schedule.interface";
 interface ScheduleStoreState {
   loading: boolean;
   schedules: Schedule[];
+  todaysSchedule: Schedule[] | [];
   createSchedule: (form: CreateScheduleDto) => void;
   getSchedules: () => void;
   getSchedule: (sched_id: string) => Promise<Schedule | undefined>;
-  getTodaysSchedules: (class_id: string) => Promise<Schedule[] | []>;
+  getTodaysSchedules: (class_id: string) => void;
   deleteSchedule: (id: string) => Promise<void>;
 }
 
 export const useScheduleStore = create<ScheduleStoreState>((set) => ({
   loading: false,
   schedules: [],
+  todaysSchedule: [],
   createSchedule: async (form) => {
     try {
       set({ loading: true });
@@ -149,7 +151,7 @@ export const useScheduleStore = create<ScheduleStoreState>((set) => ({
       const data = await res.json();
 
       if (res.ok && data) {
-        return data as Schedule[];
+        set({ todaysSchedule: data });
       } else {
         console.log(res.status);
         return [];

@@ -4,7 +4,6 @@ import { create } from "zustand";
 import { BASE_URL } from "../constants/base-url.constant";
 import { CreateUserDto } from "../dto/create-user.dto";
 import { Roles } from "../enums/role.enum";
-import { objectJsonFormatter } from "../helpers/objectJsonFormatter";
 import { Admin } from "../interfaces/admin.interface";
 import { Parent } from "../interfaces/parent.interface";
 import { Student } from "../interfaces/student.interface";
@@ -51,8 +50,8 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
       });
 
       const data = await res.json();
+
       if (data) {
-        objectJsonFormatter(data);
         await AsyncStorage.setItem("accessToken", data.access_token);
         setParsedUser(data.user);
       } else {

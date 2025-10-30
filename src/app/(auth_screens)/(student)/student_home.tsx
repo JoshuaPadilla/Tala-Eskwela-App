@@ -2,34 +2,21 @@ import ImageComponent from "@/src/components/image_component";
 import SearchBarComponent from "@/src/components/search_bar_component";
 import StudentScheduleList from "@/src/components/student_components/student_schedule_list";
 import { Icons } from "@/src/constants/icons/icons.constant";
-import { Schedule } from "@/src/interfaces/schedule.interface";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const StudentHome = () => {
   const { studentUser, logout } = useAuthStore();
-  const { getTodaysSchedules, loading, getSchedules, schedules } =
-    useScheduleStore();
-
-  const [todaysSched, setTodaysSched] = useState<Schedule[] | []>([]);
+  const { getTodaysSchedules, loading, todaysSchedule } = useScheduleStore();
 
   useEffect(() => {
-    getSchedules();
-    const fetchTodaysSchedules = async () => {
-      if (studentUser?.class.id) {
-        const result = await getTodaysSchedules(studentUser.class.id);
-
-        if (result) {
-          setTodaysSched(result);
-        }
-      }
-    };
-
-    fetchTodaysSchedules();
+    if (studentUser?.class && studentUser?.class.id) {
+      getTodaysSchedules(studentUser.class.id || "");
+    }
   }, [studentUser, getTodaysSchedules]);
 
   const handleLogout = () => {
@@ -46,7 +33,7 @@ const StudentHome = () => {
     <SafeAreaView className="flex-1 p-6  gap-2">
       {/* Headings */}
       <View className="flex-row justify-between items-center w-full">
-        <TouchableOpacity onPress={handleOptionPress} className="w-[100px]">
+        <TouchableOpacity onPress={handleLogout} className="w-[100px]">
           <ImageComponent
             source={studentUser?.profileUrl || null}
             size={40}
@@ -90,14 +77,14 @@ const StudentHome = () => {
         <View className="h-[40%]">
           <ActivityIndicator size={"large"} />
         </View>
-      ) : todaysSched.length === 0 ? (
+      ) : todaysSchedule && todaysSchedule.length === 0 ? (
         <View className="p-8 items-center justify-center">
           <Text className="font-rubik-bold text-lg text-cyan-500">
             No Schedule Today!
           </Text>
         </View>
       ) : (
-        <StudentScheduleList schedules={schedules} />
+        <StudentScheduleList schedules={todaysSchedule} />
       )}
     </SafeAreaView>
   );

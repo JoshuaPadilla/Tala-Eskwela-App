@@ -3,7 +3,7 @@ import { Student } from "./student.interface";
 import { Teacher } from "./teacher.interface";
 
 export interface Class {
-  id?: string;
+  id: string;
   section: string;
   grade_lvl: number | string;
   createdAt?: Date;

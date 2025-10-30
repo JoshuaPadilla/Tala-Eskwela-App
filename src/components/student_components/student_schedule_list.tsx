@@ -4,7 +4,7 @@ import { ScrollView } from "react-native";
 import StudentScheduleCard from "./student_schedule_cards";
 
 interface Props {
-  schedules: Schedule[];
+  schedules: Schedule[] | [];
 }
 
 const StudentScheduleList = ({ schedules }: Props) => {
