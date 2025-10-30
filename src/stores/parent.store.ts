@@ -53,7 +53,6 @@ export const useParentStore = create<ParentStoreState>((set) => ({
       const data = await res.json();
 
       if (data) {
-        console.log(data);
         set({ parentsForAddingStudents: data });
       } else {
         throw new Error("No parents found");

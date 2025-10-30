@@ -25,7 +25,6 @@ export default function Index() {
 
   const handleLogin = () => {
     if (!email || !password) return;
-    console.log("Login button clicked");
     login(email, password, expoPushToken?.data);
   };
 

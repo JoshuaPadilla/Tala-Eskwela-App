@@ -10,6 +10,7 @@ interface AttendanceStoreState {
   addAttendance: (attendance: Attendance) => void;
   getCurrentSchedAttendance: (class_id: string) => void;
   getAttendanceByCurrentSchedule: (class_id: string, sched_id: string) => void;
+  updateCurrentSchedAttendance: (attendance: Attendance) => void;
 }
 
 export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
@@ -92,5 +93,21 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+
+  updateCurrentSchedAttendance(attendance) {
+    set((state) => {
+      const updatedCurrentSchedAttendance = [
+        attendance,
+        ...state.currentSchedAttendance,
+      ];
+
+      const sortedArray = updatedCurrentSchedAttendance.sort((a, b) => {
+        return (
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+      });
+      return { currentSchedAttendance: sortedArray };
+    });
   },
 }));

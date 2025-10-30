@@ -4,12 +4,11 @@ import H1Text from "@/src/components/text_components/h1";
 import H3Text from "@/src/components/text_components/h3";
 import H4Text from "@/src/components/text_components/h4";
 import { TeacherIcons } from "@/src/constants/icons/teacher.constants";
-import { Schedule } from "@/src/interfaces/schedule.interface";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -21,33 +20,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherHome = () => {
   const { teacherUser, logout } = useAuthStore();
-  const { getTodaysSchedules } = useScheduleStore();
-
-  const [todaysSchedule, setTodaysSchedule] = useState<Schedule[]>([]);
-  const [loadingSched, setLoadingSched] = useState(false);
+  const { getTodaysSchedules, todaysSchedule, loading } = useScheduleStore();
 
   useEffect(() => {
-    const getCurrentSched = async () => {
-      try {
-        setLoadingSched(true);
-
-        if (!teacherUser?.advisory_class) return;
-
-        const result = await getTodaysSchedules(
-          teacherUser?.advisory_class.id || ""
-        );
-
-        if (!result) return;
-
-        setTodaysSchedule(result);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoadingSched(false);
-      }
-    };
-
-    getCurrentSched();
+    if (teacherUser?.advisory_class && teacherUser.advisory_class.id) {
+      getTodaysSchedules(teacherUser.advisory_class.id);
+    }
   }, [getTodaysSchedules, teacherUser]);
 
   const handleLogout = () => {
@@ -130,7 +108,7 @@ const TeacherHome = () => {
           <H3Text value="Todays Schedule:" additionalClassname="text-black" />
 
           <ScrollView contentContainerClassName="pb-[100px] py-4 items-center px-2 gap-2">
-            {loadingSched ? (
+            {loading ? (
               <ActivityIndicator size={"large"} className="my-4" />
             ) : todaysSchedule.length > 0 ? (
               todaysSchedule.map((sched) => (

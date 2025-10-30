@@ -1,3 +1,4 @@
+import socket from "@/lib/socket";
 import BackComponent from "@/src/components/back_component";
 import TeacherAttendanceComponent from "@/src/components/teacher_components/teacher_attendance_component";
 import { Icons } from "@/src/constants/icons/icons.constant";
@@ -7,6 +8,7 @@ import {
 } from "@/src/helpers/timeToString.helper";
 import { Schedule } from "@/src/interfaces/schedule.interface";
 import { useAttendanceStore } from "@/src/stores/attendance.store";
+import { useAuthStore } from "@/src/stores/auth.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { Image } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
@@ -17,12 +19,32 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const ViewSchedule = () => {
   const { schedule_id } = useLocalSearchParams();
   const { getSchedule, loading } = useScheduleStore();
-  const { getAttendanceByCurrentSchedule, currentSchedAttendance } =
-    useAttendanceStore();
+  const {
+    getAttendanceByCurrentSchedule,
+    currentSchedAttendance,
+    updateCurrentSchedAttendance,
+  } = useAttendanceStore();
+  const { teacherUser } = useAuthStore();
 
   const [selectedSched, setSelectedSched] = useState<Schedule | undefined>(
     undefined
   );
+
+  const totalStudents = teacherUser?.advisory_class.students?.length || 0;
+  const totalPresent = currentSchedAttendance.length;
+  const absentCount = totalStudents - totalPresent;
+
+  useEffect(() => {
+    if (socket.connected && selectedSched && selectedSched.id) {
+      socket.emit("join_subject", { subject_id: selectedSched.id });
+    }
+  }, [selectedSched]);
+
+  useEffect(() => {
+    socket.on("newAttendance", (data) => {
+      updateCurrentSchedAttendance(data.attendance);
+    });
+  }, [updateCurrentSchedAttendance]);
 
   useEffect(() => {
     const loadSchedule = async () => {
@@ -80,7 +102,7 @@ const ViewSchedule = () => {
                   />
 
                   <View>
-                    <Text className="font-rubik-semibold text-lg">16/30</Text>
+                    <Text className="font-rubik-semibold text-lg">{`${totalPresent}/${totalStudents}`}</Text>
                     <Text className="font-rubik-light text-sm">Present</Text>
                   </View>
                 </View>
@@ -92,7 +114,7 @@ const ViewSchedule = () => {
                   />
 
                   <View>
-                    <Text className="font-rubik-semibold text-lg">16/30</Text>
+                    <Text className="font-rubik-semibold text-lg">{`${absentCount}/${totalStudents}`}</Text>
                     <Text className="font-rubik-light text-sm">Absent</Text>
                   </View>
                 </View>
@@ -100,8 +122,8 @@ const ViewSchedule = () => {
             </View>
 
             {currentSchedAttendance.length > 0 &&
-              currentSchedAttendance.map((att) => (
-                <TeacherAttendanceComponent attendance={att} key={att.id} />
+              currentSchedAttendance.map((att, idx) => (
+                <TeacherAttendanceComponent attendance={att} key={idx} />
               ))}
           </ScrollView>
         </View>

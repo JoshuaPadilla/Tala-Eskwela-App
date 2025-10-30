@@ -1,31 +1,26 @@
 import TeacherScheduleComponent from "@/src/components/teacher_components/teacher_schedule_component";
 import H4Text from "@/src/components/text_components/h4";
-import { Schedule } from "@/src/interfaces/schedule.interface";
 import { useAttendanceStore } from "@/src/stores/attendance.store";
 import { useAuthStore } from "@/src/stores/auth.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ScrollView, View } from "react-native";
 
 const TeacherAttendance = () => {
   const { currentSchedAttendance } = useAttendanceStore();
   const { teacherUser } = useAuthStore();
-  const { getTodaysSchedules } = useScheduleStore();
-
-  const [todaysSchedules, setTodaysSchedules] = useState<Schedule[]>([]);
+  const { getTodaysSchedules, todaysSchedule } = useScheduleStore();
 
   useEffect(() => {
-    const getClassSchedules = async () => {
-      const scheds = await getTodaysSchedules(
-        teacherUser?.advisory_class?.id ?? ""
-      );
-
-      setTodaysSchedules(scheds);
-    };
-
-    getClassSchedules();
-  }, [getTodaysSchedules, teacherUser]);
+    if (
+      teacherUser?.advisory_class &&
+      teacherUser.advisory_class.id &&
+      todaysSchedule.length === 0
+    ) {
+      getTodaysSchedules(teacherUser.advisory_class.id);
+    }
+  }, [getTodaysSchedules, teacherUser, todaysSchedule]);
 
   return (
     <View className="flex-1 gap-4 bg-slate-100">
@@ -41,8 +36,8 @@ const TeacherAttendance = () => {
           <H4Text value={`Attendance`} additionalClassname="text-white my-4" />
         </View>
         <ScrollView contentContainerClassName="gap-2 pb-[200px]">
-          {todaysSchedules &&
-            todaysSchedules.map((sched, idx) => (
+          {todaysSchedule &&
+            todaysSchedule.map((sched, idx) => (
               <TeacherScheduleComponent
                 key={sched.id || idx}
                 schedule={sched}

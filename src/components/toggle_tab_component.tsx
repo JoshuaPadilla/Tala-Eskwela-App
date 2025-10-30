@@ -16,8 +16,6 @@ const ToggleTab = ({ trueValue, falseValue, onPress }: ToggleProps) => {
     onPress(value);
   };
 
-  console.log(value);
-
   return (
     <View className="flex-row justify-around p-4 rounded-md">
       <Pressable
