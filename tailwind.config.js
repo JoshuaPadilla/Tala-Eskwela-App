@@ -23,6 +23,11 @@ module.exports = {
         "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
       },
       colors: {
+        schedStatus: {
+          upcoming: "#ABE7B2",
+          ongoing: "#FFF9BD",
+          ended: "#FF8F8F",
+        },
         primary: {
           100: "#124170",
           200: "#26667F",
@@ -38,9 +43,9 @@ module.exports = {
         },
         danger: "#F75555",
         status: {
-          pending: "#ffcc80",
-          processing: "#64b5f6",
-          completed: "#a5d6a7",
+          late: "#FCC61D",
+          absent: "#F75555",
+          present: "#B6F500",
         },
       },
     },

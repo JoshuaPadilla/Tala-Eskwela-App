@@ -1,4 +1,8 @@
-export const shadow = (platform: string) => {
+import { Platform } from "react-native";
+
+export const shadow = () => {
+  const platform = Platform.OS;
+
   return platform === "ios"
     ? {
         shadowColor: "#000",
@@ -6,5 +10,5 @@ export const shadow = (platform: string) => {
         shadowOpacity: 0.3,
         shadowRadius: 4,
       }
-    : { elevation: 4 };
+    : { elevation: 2 };
 };
