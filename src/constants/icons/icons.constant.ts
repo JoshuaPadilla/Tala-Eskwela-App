@@ -5,6 +5,7 @@ import arrow_right from "../../../assets/icons/arrow_right.png";
 import back_cyan from "../../../assets/icons/back_cyan.png";
 import back from "../../../assets/icons/back_green.png";
 import back_white from "../../../assets/icons/back_white.png";
+import dot_option from "../../../assets/icons/dot_option.png";
 import options from "../../../assets/icons/options_icon.png";
 import plus from "../../../assets/icons/plus_icon.png";
 import present from "../../../assets/icons/present_icon.png";
@@ -37,6 +38,7 @@ interface IconsState {
   profile_placeholder: ImageSourcePropType;
   search_bar: ImageSourcePropType;
   arrow_right: ImageSourcePropType;
+  dot_option: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -58,4 +60,5 @@ export const Icons: IconsState = {
   profile_placeholder,
   search_bar,
   arrow_right,
+  dot_option,
 };

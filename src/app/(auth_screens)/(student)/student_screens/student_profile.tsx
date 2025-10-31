@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const student_profile = () => {
+const StudentProfile = () => {
   return (
     <View>
       <Text>student_profile</Text>
@@ -9,4 +9,4 @@ const student_profile = () => {
   );
 };
 
-export default student_profile;
+export default StudentProfile;

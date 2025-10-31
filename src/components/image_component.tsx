@@ -10,6 +10,7 @@ interface Props {
   h?: number;
   radius?: number;
   color?: string;
+  addStyle?: object;
   contentFit?: ImageContentFit;
 }
 
@@ -21,6 +22,7 @@ const ImageComponent = ({
   radius,
   color,
   contentFit,
+  addStyle,
 }: Props) => {
   const imgSz = size ? { width: size, height: size } : { width: w, height: h };
 
@@ -30,7 +32,7 @@ const ImageComponent = ({
   return (
     <Image
       source={source || Icons.profile_placeholder}
-      style={{ ...imgSz, borderRadius: radius }}
+      style={[{ ...imgSz, borderRadius: radius }, addStyle]}
       placeholder={blurhash}
       tintColor={color}
       contentFit={contentFit ? contentFit : "contain"}

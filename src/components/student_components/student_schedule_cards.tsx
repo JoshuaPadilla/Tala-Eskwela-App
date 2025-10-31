@@ -3,6 +3,7 @@ import { timeToDisplay } from "@/src/helpers/timeToString.helper";
 import { Schedule } from "@/src/interfaces/schedule.interface";
 import { ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import ImageComponent from "../image_component";
@@ -12,8 +13,18 @@ interface Props {
 }
 
 const StudentScheduleCard = ({ sched }: Props) => {
+  const handleViewSchedule = () => {
+    router.push({
+      pathname: "/student_screens/student_view_schedule",
+      params: { schedule_id: sched.id },
+    });
+  };
+
   return (
-    <TouchableOpacity className="flex-1 min-w-[45%]  rounded-md bg-cyan-500 h-[150px]">
+    <TouchableOpacity
+      className="flex-1 min-w-[45%]  rounded-md bg-cyan-500 h-[150px]"
+      onPress={handleViewSchedule}
+    >
       <ImageBackground
         source={Icons.parent}
         style={{ height: "100%", width: "100%" }}
