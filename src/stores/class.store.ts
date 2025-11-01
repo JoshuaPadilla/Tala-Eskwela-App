@@ -20,11 +20,15 @@ interface ClassStoreState {
     student_ids: string[]
   ) => Promise<Student[] | undefined>;
   getCurrentClassSchedule: (class_id: string) => Promise<Schedule | undefined>;
+  getCurrentClassSchedules: (class_id: string) => void;
+  currentClassSchedules: Schedule[] | [];
+  removeStudentFromClass: (class_id: string, student_id: string) => void;
 }
 
 export const useClassStore = create<ClassStoreState>((set, get) => ({
   loading: false,
   classes: [],
+  currentClassSchedules: [],
   createClass: async (form) => {
     try {
       set({ loading: true });
@@ -182,6 +186,46 @@ export const useClassStore = create<ClassStoreState>((set, get) => ({
       return currentSched;
     } catch (error) {
       console.log(error);
+    }
+  },
+  getCurrentClassSchedules: async (class_id) => {
+    const { getClass } = get();
+
+    try {
+      const classObj = await getClass(class_id);
+
+      if (!classObj) return [];
+
+      if (classObj.schedules) {
+        set({ currentClassSchedules: classObj.schedules });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  removeStudentFromClass: async (class_id, student_id) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const res = await fetch(`${BASE_URL}class/remove/${class_id}`, {
+        method: "Post",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({ student_id }),
+      });
+
+      if (res.status === 201) {
+        console.log("student removed from class");
+      } else {
+        console.log(res.status);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 }));

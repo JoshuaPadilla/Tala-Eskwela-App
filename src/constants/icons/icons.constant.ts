@@ -14,6 +14,7 @@ import present from "../../../assets/icons/present_icon.png";
 import edit from "../../../assets/icons/profile_edit.png";
 import profile_placeholder from "../../../assets/icons/profile_placeholder.png";
 import profile from "../../../assets/icons/profile_placeholder_icon.png";
+import remove_student_icon from "../../../assets/icons/remove_student_icon.png";
 import parent from "../../../assets/icons/role_selection/parent.png";
 import student from "../../../assets/icons/role_selection/student.png";
 import teacher from "../../../assets/icons/role_selection/teacher.png";
@@ -49,6 +50,7 @@ interface IconsState {
   student_sched_absent: ImageSourcePropType;
   student_sched_late: ImageSourcePropType;
   student_sched_present: ImageSourcePropType;
+  remove_student_icon: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -76,4 +78,5 @@ export const Icons: IconsState = {
   student_sched_absent,
   student_sched_late,
   student_sched_present,
+  remove_student_icon,
 };

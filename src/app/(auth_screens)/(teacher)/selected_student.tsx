@@ -1,6 +1,8 @@
 import BackComponent from "@/src/components/back_component";
+import RemoveStudentConfirmationModal from "@/src/components/modals/remove-student-confirmation-modal";
 import SelectParentModal from "@/src/components/modals/select-parent-modal";
 import { Icons } from "@/src/constants/icons/icons.constant";
+import { useClassStore } from "@/src/stores/class.store";
 import { useParentStore } from "@/src/stores/parent.store";
 import { useStudentStore } from "@/src/stores/student.store";
 import { useUploadStore } from "@/src/stores/upload.store";
@@ -19,11 +21,16 @@ const SelectedStudent = () => {
     useStudentStore();
 
   const { deleteStudent } = useStudentStore();
+  const { removeStudentFromClass } = useClassStore();
 
   const { getParentsForAddingStudents } = useParentStore();
   const { uploadProfile } = useUploadStore();
 
   const [addParentModalVisible, setAddParentModalVisible] = useState(false);
+  const [
+    removeStudentConfirmationVisible,
+    setRemoveStudentConfirmationVisible,
+  ] = useState(false);
 
   const handleRegister = () => {
     setStudentToRegister(selectedStudent?.id || "");
@@ -88,14 +95,25 @@ const SelectedStudent = () => {
   };
 
   const handleDeleteStudent = async () => {
-    if (!selectedStudent) return;
-    await deleteStudent(selectedStudent.id || "");
+    console.log("Deletting student...");
+
+    if (selectedStudent && selectedStudent.class) {
+      removeStudentFromClass(selectedStudent?.class.id, selectedStudent?.id);
+    } else {
+      console.log("cannot remove student with no class yet");
+    }
 
     router.back();
+    // setRemoveStudentConfirmationVis ible(true);
   };
 
   return (
     <>
+      <RemoveStudentConfirmationModal
+        modalVisible={removeStudentConfirmationVisible}
+        setModalVisible={setRemoveStudentConfirmationVisible}
+        onConfirm={handleDeleteStudent}
+      />
       <SelectParentModal
         modalVisible={addParentModalVisible}
         onClose={handleAddParentModalClose}
@@ -105,7 +123,10 @@ const SelectedStudent = () => {
         <View className="flex-row justify-between items-center">
           <BackComponent />
 
-          <Pressable hitSlop={5} onPress={handleDeleteStudent}>
+          <Pressable
+            hitSlop={5}
+            onPress={() => setRemoveStudentConfirmationVisible(true)}
+          >
             <Image
               source={Icons.trash}
               style={{ height: 15, width: 15, tintColor: "#F75555" }}

@@ -6,6 +6,7 @@ import { getSchedTimeStatus } from "@/src/helpers/isBetween.helper";
 import { shadow } from "@/src/helpers/shadow";
 import { timeToDisplay } from "@/src/helpers/timeToString.helper";
 import { Schedule } from "@/src/interfaces/schedule.interface";
+import { useClassStore } from "@/src/stores/class.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const StudentViewSchedule = () => {
   const { schedule_id } = useLocalSearchParams<{ schedule_id: string }>();
   const { getSchedule, loading } = useScheduleStore();
+  const { getCurrentClassSchedules, currentClassSchedules } = useClassStore();
 
   const [selectedSched, setSelectedSched] = useState<Schedule | undefined>(
     undefined
@@ -54,6 +56,12 @@ const StudentViewSchedule = () => {
 
     fetchScheduleDetails();
   }, [schedule_id, getSchedule]);
+
+  useEffect(() => {
+    if (selectedSched?.class) {
+      getCurrentClassSchedules(selectedSched.class.id);
+    }
+  }, [getCurrentClassSchedules, selectedSched]);
   return (
     <SafeAreaView className="p-2 bg-slate-100 ">
       {/* Heading */}
@@ -161,19 +169,47 @@ const StudentViewSchedule = () => {
             <View className="flex-1 h-full gap-2">
               {/* upper card */}
               <View
-                className="flex-1 bg-white rounded-lg
-                "
+                className="flex-1 max-h-[25%] bg-white rounded-lg
+                 p-4"
                 style={shadow()}
               >
-                <Progress.Bar progress={0.3} width={null} />
+                <Text className="font-rubik-semibold text-md text-black-100/80">
+                  Total of:
+                </Text>
+
+                <View className="flex-row gap-2 items-end">
+                  <Text className="font-rubik-bold text-2xl ">12</Text>
+                  <Text className="font-rubik-regular text-md text-black-100/60">
+                    sessions
+                  </Text>
+                </View>
               </View>
 
               {/* lower card */}
               <View
-                className="flex-1 max-h-[20%] bg-white rounded-lg
+                className="flex-1 bg-white rounded-lg p-2
                 "
                 style={shadow()}
-              ></View>
+              >
+                {/* Titles */}
+                <Text className="font-rubik-medium text-md">
+                  Class Standings
+                </Text>
+                <View className="flex-row gap-2 items-center">
+                  <View className="flex-row gap-2 items-center">
+                    <View className="size-4 bg-status-present rounded-sm" />
+                    <Text className="font-rubik-regular text-sm">Present</Text>
+                  </View>
+                  <View className="flex-row gap-2 items-center">
+                    <View className="size-4 bg-status-absent rounded-sm" />
+                    <Text className="font-rubik-regular text-sm">Absent</Text>
+                  </View>
+                </View>
+
+                <View className="">
+                  <Progress.Bar progress={0.3} width={null} />
+                </View>
+              </View>
             </View>
 
             {/* right cards */}
