@@ -5,9 +5,15 @@ import ImageComponent from "./image_component";
 
 interface SearchBarProps {
   onSubmit: (text: string) => void;
+  placeHolderText?: string;
+  additionalClassname?: string;
 }
 
-const SearchBarComponent = ({ onSubmit }: SearchBarProps) => {
+const SearchBarComponent = ({
+  onSubmit,
+  placeHolderText,
+  additionalClassname,
+}: SearchBarProps) => {
   const [value, setValue] = useState("");
 
   const handleInputChange = (text: string) => {
@@ -19,7 +25,9 @@ const SearchBarComponent = ({ onSubmit }: SearchBarProps) => {
   };
 
   return (
-    <View className="flex-row justify-between items-center px-4 py-2 w-full border border-1 border-orange-400 rounded-md">
+    <View
+      className={`flex-row justify-between items-center px-4 py-2 border border-1 border-orange-400 rounded-md ${additionalClassname}`}
+    >
       <View className="flex-row items-center gap-4">
         <ImageComponent source={Icons.search_bar} size={20} />
 
@@ -29,7 +37,7 @@ const SearchBarComponent = ({ onSubmit }: SearchBarProps) => {
           onChangeText={(text) => {
             handleInputChange(text);
           }}
-          placeholder="Search a subject"
+          placeholder={placeHolderText}
           placeholderTextColor={"#fdba74"}
           cursorColor={"#f97316"}
         />

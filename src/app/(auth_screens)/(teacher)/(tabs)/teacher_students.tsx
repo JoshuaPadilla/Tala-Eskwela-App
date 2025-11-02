@@ -1,5 +1,6 @@
 import BackComponent from "@/src/components/back_component";
 import SelectStudentsModal from "@/src/components/modals/select-students.modal";
+import SearchBarComponent from "@/src/components/search_bar_component";
 import StudentListComponent from "@/src/components/student-list-component";
 import { Student } from "@/src/interfaces/student.interface";
 import { useAuthStore } from "@/src/stores/auth.store";
@@ -82,21 +83,35 @@ const TeacherStudents = () => {
         onCloseCallback={addStudentCloseCallback}
         students={availStudents}
       />
-      <SafeAreaView className="flex-1 p-8">
-        <View className="flex-row justify-between items-center">
-          <BackComponent />
 
-          <Pressable
-            className="px-4 py-2 bg-primary-300 rounded-md"
-            onPress={handleOpenAddStudentModal}
-          >
-            <Text>Add</Text>
-          </Pressable>
+      <SafeAreaView className="flex-1 py-6 gap-4 bg-slate-50">
+        {/* headings */}
+        <View className="flex-row justify-between items-center w-full px-6">
+          <View className="w-[100px]">
+            <BackComponent />
+          </View>
+
+          <Text className="font-poppins-bold text-lg text-cyan-400">
+            Students
+          </Text>
+
+          <View className="w-[100px]">
+            <Pressable
+              className="px-4 py-2 bg-primary-300 rounded-md w-fit"
+              onPress={handleOpenAddStudentModal}
+            >
+              <Text>Add</Text>
+            </Pressable>
+          </View>
         </View>
 
-        <Text className="text-lg font-bold">Students:</Text>
+        <SearchBarComponent
+          onSubmit={() => {}}
+          placeHolderText="Search a student"
+          additionalClassname="mx-6"
+        />
 
-        <ScrollView contentContainerClassName="gap-2">
+        <ScrollView contentContainerClassName="gap-2 px-6 pb-[100px]">
           {students &&
             students.map((student, idx) => {
               return (

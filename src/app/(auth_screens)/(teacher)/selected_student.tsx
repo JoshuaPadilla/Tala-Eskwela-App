@@ -31,8 +31,6 @@ const SelectedStudent = () => {
     setRemoveStudentConfirmationVisible,
   ] = useState(false);
 
-  const [removing, setRemoving] = useState(false);
-
   const handleRegister = () => {
     setStudentToRegister(selectedStudent?.id || "");
 
@@ -98,20 +96,13 @@ const SelectedStudent = () => {
   const handleDeleteStudent = async () => {
     console.log("Deletting student...");
 
-    try {
-      setRemoving(true);
-      if (selectedStudent && selectedStudent.class) {
-        await removeStudentFromClass(
-          selectedStudent?.class.id,
-          selectedStudent?.id
-        );
-      } else {
-        console.log("cannot remove student with no class yet");
-      }
-    } catch (error) {
-      console.log(error, "removing student error");
-    } finally {
-      setRemoving(false);
+    if (selectedStudent && selectedStudent.class) {
+      await removeStudentFromClass(
+        selectedStudent?.class.id,
+        selectedStudent?.id
+      );
+    } else {
+      console.log("cannot remove student with no class yet");
     }
 
     router.replace("/teacher_students");
