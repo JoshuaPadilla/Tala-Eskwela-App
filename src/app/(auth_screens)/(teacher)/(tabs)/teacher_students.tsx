@@ -10,7 +10,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherStudents = () => {
-  const { getStudents } = useStudentStore();
+  const { getStudents, selectedStudent } = useStudentStore();
   const { teacherUser } = useAuthStore();
   const { addStudents } = useClassStore();
 
@@ -46,6 +46,15 @@ const TeacherStudents = () => {
     }
 
     setAddStudentsModalVisible(false);
+  };
+
+  const handleRemoveStudent = () => {
+    if (selectedStudent) {
+      setStudents(
+        (prev) =>
+          (prev = prev.filter((student) => student.id !== selectedStudent.id))
+      );
+    }
   };
 
   useEffect(() => {

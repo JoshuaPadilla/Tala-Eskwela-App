@@ -22,7 +22,10 @@ interface ClassStoreState {
   getCurrentClassSchedule: (class_id: string) => Promise<Schedule | undefined>;
   getCurrentClassSchedules: (class_id: string) => void;
   currentClassSchedules: Schedule[] | [];
-  removeStudentFromClass: (class_id: string, student_id: string) => void;
+  removeStudentFromClass: (
+    class_id: string,
+    student_id: string
+  ) => Promise<void>;
 }
 
 export const useClassStore = create<ClassStoreState>((set, get) => ({

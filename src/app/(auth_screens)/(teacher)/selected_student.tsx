@@ -20,7 +20,6 @@ const SelectedStudent = () => {
   const { selectedStudent, setStudentToRegister, addParent } =
     useStudentStore();
 
-  const { deleteStudent } = useStudentStore();
   const { removeStudentFromClass } = useClassStore();
 
   const { getParentsForAddingStudents } = useParentStore();
@@ -31,6 +30,8 @@ const SelectedStudent = () => {
     removeStudentConfirmationVisible,
     setRemoveStudentConfirmationVisible,
   ] = useState(false);
+
+  const [removing, setRemoving] = useState(false);
 
   const handleRegister = () => {
     setStudentToRegister(selectedStudent?.id || "");
@@ -97,13 +98,23 @@ const SelectedStudent = () => {
   const handleDeleteStudent = async () => {
     console.log("Deletting student...");
 
-    if (selectedStudent && selectedStudent.class) {
-      removeStudentFromClass(selectedStudent?.class.id, selectedStudent?.id);
-    } else {
-      console.log("cannot remove student with no class yet");
+    try {
+      setRemoving(true);
+      if (selectedStudent && selectedStudent.class) {
+        await removeStudentFromClass(
+          selectedStudent?.class.id,
+          selectedStudent?.id
+        );
+      } else {
+        console.log("cannot remove student with no class yet");
+      }
+    } catch (error) {
+      console.log(error, "removing student error");
+    } finally {
+      setRemoving(false);
     }
 
-    router.back();
+    router.replace("/teacher_students");
     // setRemoveStudentConfirmationVis ible(true);
   };
 

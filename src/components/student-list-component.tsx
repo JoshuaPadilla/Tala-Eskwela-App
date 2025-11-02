@@ -13,7 +13,7 @@ const StudentListComponent = ({ student }: StudentListComponentProps) => {
 
   const handleSelectStudent = () => {
     setSelectedStudent(student);
-    router.push("/(auth_screens)/(teacher)/selected_student");
+    router.push({ pathname: "/(auth_screens)/(teacher)/selected_student" });
   };
 
   return (
