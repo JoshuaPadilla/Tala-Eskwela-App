@@ -1,5 +1,5 @@
 import socket from "@/lib/socket";
-import BackComponent from "@/src/components/back_component";
+import ImageComponent from "@/src/components/image_component";
 import TeacherAttendanceComponent from "@/src/components/teacher_components/teacher_attendance_component";
 import { Icons } from "@/src/constants/icons/icons.constant";
 import {
@@ -67,8 +67,6 @@ const ViewSchedule = () => {
 
   return (
     <SafeAreaView className="flex-1 p-6">
-      <BackComponent />
-
       {loading ? (
         <View className="h-[40%]">
           <ActivityIndicator size={"large"} />
@@ -121,10 +119,22 @@ const ViewSchedule = () => {
               </View>
             </View>
 
-            {currentSchedAttendance.length > 0 &&
+            {currentSchedAttendance.length > 0 ? (
               currentSchedAttendance.map((att, idx) => (
                 <TeacherAttendanceComponent attendance={att} key={idx} />
-              ))}
+              ))
+            ) : (
+              <View className="items-center justify-center p-4">
+                <Text className="font-rubik-medium text-lg">
+                  No attendance yet!
+                </Text>
+                <ImageComponent
+                  source={Icons.no_attendance_yet}
+                  size={200}
+                  addStyle={{ opacity: 60 }}
+                />
+              </View>
+            )}
           </ScrollView>
         </View>
       )}

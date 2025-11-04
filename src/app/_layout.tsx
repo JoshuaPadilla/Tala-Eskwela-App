@@ -21,7 +21,7 @@ export default function RootLayout() {
           router.replace("/(auth_screens)/(teacher)/(tabs)/teacher_home");
           break;
         case Roles.STUDENT:
-          router.replace("/(auth_screens)/(student)/student_home");
+          router.replace("/(auth_screens)/(student)/(tabs)/student_home");
           break;
         case Roles.ADMIN:
           router.replace("/(auth_screens)/(admin)/admin_home");

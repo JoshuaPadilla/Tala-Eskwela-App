@@ -8,6 +8,7 @@ import back_white from "../../../assets/icons/back_white.png";
 import class_advisory from "../../../assets/icons/class_advisory_icon.png";
 import date_time from "../../../assets/icons/date_time_icon.png";
 import dot_option from "../../../assets/icons/dot_option.png";
+import no_attendance_yet from "../../../assets/icons/no_attendance_yet.png";
 import options from "../../../assets/icons/options_icon.png";
 import plus from "../../../assets/icons/plus_icon.png";
 import present from "../../../assets/icons/present_icon.png";
@@ -51,6 +52,7 @@ interface IconsState {
   student_sched_late: ImageSourcePropType;
   student_sched_present: ImageSourcePropType;
   remove_student_icon: ImageSourcePropType;
+  no_attendance_yet: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -79,4 +81,5 @@ export const Icons: IconsState = {
   student_sched_late,
   student_sched_present,
   remove_student_icon,
+  no_attendance_yet,
 };

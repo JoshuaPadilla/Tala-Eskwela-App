@@ -34,6 +34,9 @@ const TeacherHome = () => {
     router.replace("/");
   };
 
+  const totalStudents = teacherUser?.advisory_class.students?.length || 0;
+  const totalSubjects = teacherUser?.advisory_class.schedules?.length || 0;
+
   return (
     <>
       <LinearGradient
@@ -73,7 +76,10 @@ const TeacherHome = () => {
                 </View>
               </View>
 
-              <H4Text value={"8"} additionalClassname="text-orange-400" />
+              <H4Text
+                value={`${totalSubjects}`}
+                additionalClassname="text-orange-400"
+              />
             </View>
 
             {/* Students */}
@@ -97,7 +103,10 @@ const TeacherHome = () => {
                 </View>
               </View>
 
-              <H4Text value={"2 "} additionalClassname="text-orange-400" />
+              <H4Text
+                value={`${totalStudents}`}
+                additionalClassname="text-orange-400"
+              />
             </View>
           </View>
           <Pressable onPress={handleLogout}>

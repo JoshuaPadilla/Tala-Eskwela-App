@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { TeacherIcons } from "../constants/icons/teacher.constants";
 import { shadow } from "../helpers/shadow";
 import { timeToDisplay } from "../helpers/timeToString.helper";
@@ -15,8 +15,6 @@ interface ScheduleComponentProps {
 }
 
 const ScheduleComponent = ({ schedule }: ScheduleComponentProps) => {
-  const shadowStyle = shadow(Platform.OS);
-
   const [loading, setLoading] = useState(false);
   const { deleteSchedule } = useScheduleStore();
 
@@ -34,7 +32,7 @@ const ScheduleComponent = ({ schedule }: ScheduleComponentProps) => {
   return (
     <TouchableOpacity
       className="flex-row gap-4 p-4 bg-white rounded-lg w-full"
-      style={shadowStyle}
+      style={shadow()}
     >
       <ImageComponent
         source={TeacherIcons.students_icon}
