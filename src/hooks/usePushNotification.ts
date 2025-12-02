@@ -1,6 +1,7 @@
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Platform } from "react-native";
 
@@ -29,6 +30,26 @@ export const usePushNotifications = (): PushNotificationState => {
 
   const notificationListener = useRef<Notifications.EventSubscription>(null);
   const responseListener = useRef<Notifications.EventSubscription>(null);
+
+  const handleNotificationResponse = (
+    response: Notifications.NotificationResponse
+  ) => {
+    const data = response.notification.request.content;
+
+    // FIX 1: Use the correct URL path (Group folders are invisible in the URL)
+    // If your file is at: app/(auth_screens)/(student)/(tabs)/student_insights.tsx
+    // The path is simply: /student_insights
+
+    // You can also send the path dynamically from your backend in the 'data' payload
+
+    if (data.data.user === "student") {
+      router.push({
+        pathname:
+          "/(auth_screens)/(student)/student_screens/student_view_attendance",
+        params: { attendanceId: String(data.data.attendanceId) },
+      });
+    }
+  };
 
   const registerForPushNotificationsAsync = async () => {
     let token;
@@ -105,7 +126,16 @@ export const usePushNotifications = (): PushNotificationState => {
       });
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {});
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        handleNotificationResponse(response);
+      });
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (response) {
+        // We wait a brief moment to ensure navigation container is ready
+        setTimeout(() => handleNotificationResponse(response), 500);
+      }
+    });
 
     return () => {
       notificationListener.current?.remove();

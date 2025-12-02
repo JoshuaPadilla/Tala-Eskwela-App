@@ -11,6 +11,7 @@ interface AttendanceStoreState {
   getCurrentSchedAttendance: (class_id: string) => void;
   getAttendanceByCurrentSchedule: (class_id: string, sched_id: string) => void;
   updateCurrentSchedAttendance: (attendance: Attendance) => void;
+  getAttendance: (attendanceId: string) => Promise<Attendance | undefined>;
 }
 
 export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
@@ -102,12 +103,42 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
         ...state.currentSchedAttendance,
       ];
 
-      const sortedArray = updatedCurrentSchedAttendance.sort((a, b) => {
-        return (
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        );
-      });
-      return { currentSchedAttendance: sortedArray };
+      // const sortedArray = updatedCurrentSchedAttendance.sort((a, b) => {
+      //   return (
+      //     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      //   );
+      // });
+      return { currentSchedAttendance: updatedCurrentSchedAttendance };
     });
+  },
+
+  getAttendance: async (attendanceId) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+
+      const res = await fetch(`${BASE_URL}attendance/one/${attendanceId}`, {
+        method: "Get",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        return data;
+      } else {
+        console.log("No Attendance for this schedule");
+      }
+
+      return undefined;
+    } catch (error) {
+      console.log("getCurrentSchedAttendance:", error);
+    } finally {
+      set({ loading: false });
+    }
   },
 }));
