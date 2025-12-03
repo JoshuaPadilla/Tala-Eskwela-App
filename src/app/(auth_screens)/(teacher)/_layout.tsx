@@ -7,6 +7,10 @@ export default function TeacherLayout() {
       <Stack.Screen name="selected_student" options={{ headerShown: false }} />
       <Stack.Screen name="register_student" options={{ headerShown: false }} />
       <Stack.Screen name="view_schedule" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="teacher_view_attendance"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

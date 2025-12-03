@@ -9,6 +9,10 @@ import class_advisory from "../../../assets/icons/class_advisory_icon.png";
 import date_time from "../../../assets/icons/date_time_icon.png";
 import dot_option from "../../../assets/icons/dot_option.png";
 import no_attendance_yet from "../../../assets/icons/no_attendance_yet.png";
+import notif_absent from "../../../assets/icons/notif_absent.png";
+import notif_cutting from "../../../assets/icons/notif_cutting.png";
+import notif_late from "../../../assets/icons/notif_late.png";
+import notif_present from "../../../assets/icons/notif_present.png";
 import options from "../../../assets/icons/options_icon.png";
 import plus from "../../../assets/icons/plus_icon.png";
 import present from "../../../assets/icons/present_icon.png";
@@ -53,6 +57,10 @@ interface IconsState {
   student_sched_present: ImageSourcePropType;
   remove_student_icon: ImageSourcePropType;
   no_attendance_yet: ImageSourcePropType;
+  notif_present: ImageSourcePropType;
+  notif_absent: ImageSourcePropType;
+  notif_late: ImageSourcePropType;
+  notif_cutting: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -82,4 +90,8 @@ export const Icons: IconsState = {
   student_sched_present,
   remove_student_icon,
   no_attendance_yet,
+  notif_absent,
+  notif_cutting,
+  notif_late,
+  notif_present,
 };

@@ -93,7 +93,8 @@ export function formatAttendanceDate(timestamp: Date) {
   return `${month} ${day} ${year}`;
 }
 
-export function formatAttendanceTime(timestamp: Date) {
+export function formatAttendanceTime(timestamp?: Date) {
+  if (!timestamp) return;
   const dateObj = new Date(timestamp);
 
   // Options for 12-hour format with hours, minutes, and AM/PM

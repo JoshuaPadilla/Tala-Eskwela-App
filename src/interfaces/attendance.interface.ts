@@ -9,4 +9,5 @@ export interface Attendance {
   timestamp: Date;
   student: Student;
   class: Class;
+  scheduleId: string;
 }

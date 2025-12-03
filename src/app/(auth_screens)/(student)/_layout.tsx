@@ -4,7 +4,15 @@ export default function StudentLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="student_screens" options={{ headerShown: false }} />
+      <Stack.Screen name="student_profile" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="student_view_attendance"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="student_view_schedule"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

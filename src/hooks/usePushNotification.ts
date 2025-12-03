@@ -1,16 +1,22 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Platform } from "react-native";
+import { useAuthStore } from "../stores/auth.store";
 
 export interface PushNotificationState {
   notification?: Notifications.Notification;
   expoPushToken?: Notifications.ExpoPushToken;
 }
 
+const HANDLED_NOTIFICATION_KEY = "lastHandledNotificationId";
+
 export const usePushNotifications = (): PushNotificationState => {
+  const { studentUser, parentUser } = useAuthStore();
+
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldPlaySound: true,
@@ -31,21 +37,35 @@ export const usePushNotifications = (): PushNotificationState => {
   const notificationListener = useRef<Notifications.EventSubscription>(null);
   const responseListener = useRef<Notifications.EventSubscription>(null);
 
-  const handleNotificationResponse = (
+  const handleNotificationResponse = async (
     response: Notifications.NotificationResponse
   ) => {
     const data = response.notification.request.content;
+    const notificationId = response.notification.request.identifier;
 
-    // FIX 1: Use the correct URL path (Group folders are invisible in the URL)
-    // If your file is at: app/(auth_screens)/(student)/(tabs)/student_insights.tsx
-    // The path is simply: /student_insights
+    // Check if we've already handled this specific notification
+    const lastHandledId = await AsyncStorage.getItem(HANDLED_NOTIFICATION_KEY);
 
-    // You can also send the path dynamically from your backend in the 'data' payload
+    if (lastHandledId === notificationId) {
+      console.log("🚫 Notification already handled:", notificationId);
+      return;
+    }
+
+    // Mark this notification as handled
+    await AsyncStorage.setItem(HANDLED_NOTIFICATION_KEY, notificationId);
+    console.log("✅ Handling notification:", notificationId);
+    console.log(data.data.user);
+
+    if (data.data.user === "parent") {
+      router.push({
+        pathname: "/parent_view_notif",
+        params: { attendanceId: String(data.data.attendanceId) },
+      });
+    }
 
     if (data.data.user === "student") {
       router.push({
-        pathname:
-          "/(auth_screens)/(student)/student_screens/student_view_attendance",
+        pathname: "/student_view_attendance",
         params: { attendanceId: String(data.data.attendanceId) },
       });
     }
@@ -104,7 +124,6 @@ export const usePushNotifications = (): PushNotificationState => {
         return undefined;
       }
     } else {
-      // Don't show alert in simulator/emulator as it's expected
       return undefined;
     }
 
@@ -130,9 +149,10 @@ export const usePushNotifications = (): PushNotificationState => {
         handleNotificationResponse(response);
       });
 
+    // Check for notification that opened the app
     Notifications.getLastNotificationResponseAsync().then((response) => {
       if (response) {
-        // We wait a brief moment to ensure navigation container is ready
+        // Add a delay to ensure navigation is ready
         setTimeout(() => handleNotificationResponse(response), 500);
       }
     });
@@ -142,9 +162,6 @@ export const usePushNotifications = (): PushNotificationState => {
       responseListener.current?.remove();
     };
   }, []);
-
-  // Debug the current state
-  useEffect(() => {}, [expoPushToken]);
 
   return {
     expoPushToken,

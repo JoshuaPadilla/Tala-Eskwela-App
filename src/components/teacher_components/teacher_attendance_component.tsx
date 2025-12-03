@@ -2,8 +2,9 @@ import { Icons } from "@/src/constants/icons/icons.constant";
 import { formatAttendanceTime } from "@/src/helpers/timeToString.helper";
 import { Attendance } from "@/src/interfaces/attendance.interface";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 interface TeacherAttendanceComponentProps {
   attendance: Attendance;
@@ -12,11 +13,19 @@ interface TeacherAttendanceComponentProps {
 const TeacherAttendanceComponent = ({
   attendance,
 }: TeacherAttendanceComponentProps) => {
+  const handleViewAttendance = () => {
+    router.push({
+      pathname: "/teacher_view_attendance",
+      params: { attendanceId: attendance.id },
+    });
+  };
+
   const student = attendance.student;
   const fullName = `${student.first_name} ${student.middle_name.charAt(0)}. ${student.last_name}`;
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={handleViewAttendance}
       className="flex-row px-2 py-4 gap-4 rounded-lg border-t-black-100/60"
       style={{ borderTopWidth: 0.5 }}
     >
@@ -38,7 +47,7 @@ const TeacherAttendanceComponent = ({
           {formatAttendanceTime(attendance.timestamp)}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
