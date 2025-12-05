@@ -122,6 +122,8 @@ const StudentViewAttendance = () => {
             </View>
           </View>
 
+          {/* Attendance Details */}
+
           <View className="w-full py-2 px-4 bg-white rounded-md">
             {/* grade and section */}
             <View className="flex-row gap-2 items-end justify-between py-1 border-b border-black-100/20">

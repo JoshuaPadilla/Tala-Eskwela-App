@@ -8,6 +8,7 @@ import back_white from "../../../assets/icons/back_white.png";
 import class_advisory from "../../../assets/icons/class_advisory_icon.png";
 import date_time from "../../../assets/icons/date_time_icon.png";
 import dot_option from "../../../assets/icons/dot_option.png";
+import edit_icon from "../../../assets/icons/edit_icon.png";
 import no_attendance_yet from "../../../assets/icons/no_attendance_yet.png";
 import notif_absent from "../../../assets/icons/notif_absent.png";
 import notif_cutting from "../../../assets/icons/notif_cutting.png";
@@ -61,6 +62,7 @@ interface IconsState {
   notif_absent: ImageSourcePropType;
   notif_late: ImageSourcePropType;
   notif_cutting: ImageSourcePropType;
+  edit_icon: ImageSourcePropType;
 }
 
 export const Icons: IconsState = {
@@ -94,4 +96,5 @@ export const Icons: IconsState = {
   notif_cutting,
   notif_late,
   notif_present,
+  edit_icon,
 };

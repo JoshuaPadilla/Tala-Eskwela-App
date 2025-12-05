@@ -1,4 +1,7 @@
-import BackComponent from "@/src/components/back_component";
+import EditAttendanceStatusModal from "@/src/components/teacher_components/edit_attendance_status_modal";
+import { Icons } from "@/src/constants/icons/icons.constant";
+import { ATTENDANCE_STATUS } from "@/src/enums/attendance-status";
+import { getAttendanceColor } from "@/src/helpers/getAttendanceStatus.helper";
 import {
   formatAttendanceTime,
   timeToDisplay,
@@ -10,9 +13,9 @@ import { Student } from "@/src/interfaces/student.interface";
 import { useAttendanceStore } from "@/src/stores/attendance.store";
 import { useScheduleStore } from "@/src/stores/schedule.store";
 import { Image } from "expo-image";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TeacherViewAttendance = () => {
@@ -23,14 +26,24 @@ const TeacherViewAttendance = () => {
   const [attendance, setAttendance] = useState<Attendance | undefined>(
     undefined
   );
+  const [editModalVisible, setEditModalVisible] = useState(false);
 
   const [schedule, setSchedule] = useState<Schedule | undefined>(undefined);
 
-  const { getAttendance } = useAttendanceStore();
+  const { getAttendance, updateAttendance } = useAttendanceStore();
   const { getSchedule } = useScheduleStore();
 
   const student: Student | undefined = attendance?.student || undefined;
   const classObj: Class | undefined = attendance?.class || undefined;
+
+  const handleChangeAttendanceStatus = (status: ATTENDANCE_STATUS) => {
+    updateAttendance(attendanceId, { status });
+
+    setAttendance((prev) => {
+      if (!prev) return prev;
+      return { ...prev, status };
+    });
+  };
 
   useEffect(() => {
     if (attendanceId) {
@@ -64,14 +77,16 @@ const TeacherViewAttendance = () => {
     <SafeAreaView
       className={`bg-slate-100 p-6 gap-4 items-center ${loading && "justify-center flex-1"}`}
     >
+      <EditAttendanceStatusModal
+        value={attendance?.status || ATTENDANCE_STATUS.ABSENT}
+        onConfirm={handleChangeAttendanceStatus}
+        modalVisible={editModalVisible}
+        setModalVisible={setEditModalVisible}
+      />
       {!loading && (
         <>
-          <View className="flex-row justify-between w-full items-center">
-            <BackComponent />
+          <View className="flex-row justify-between w-full items-center  ">
             <Text className="font-bold text-lg">View Attendance</Text>
-            <View className="opacity-0">
-              <BackComponent />
-            </View>
           </View>
 
           {/* Student Details */}
@@ -82,14 +97,33 @@ const TeacherViewAttendance = () => {
                 style={{ height: 70, width: 70, borderRadius: 999 }}
               />
 
-              <View className="">
+              <View className="gap-2">
+                {/* Name */}
                 <Text className="font-bold text-lg">{`${student?.first_name} ${student?.middle_name} ${student?.last_name}`}</Text>
 
-                <View className="flex-row gap-2 items-baseline">
-                  <Text className="font-normal text-sm">Student Id: </Text>
-                  <Text className="font-bold text-md">
-                    {student?.rfid_tag_uid}
-                  </Text>
+                {/* Status */}
+                <View className="flex-row gap-4 items-center">
+                  <View
+                    className="px-4 rounded-md"
+                    style={{
+                      backgroundColor: getAttendanceColor(attendance?.status),
+                    }}
+                  >
+                    <Text className="font-semibold text-xl">
+                      {attendance?.status}
+                    </Text>
+                  </View>
+
+                  {/* Edit Button */}
+                  <TouchableOpacity
+                    className="flex-row gap-2 items-baseline"
+                    onPress={() => setEditModalVisible(true)}
+                  >
+                    <Image
+                      source={Icons.edit_icon}
+                      style={{ height: 20, width: 20 }}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -133,6 +167,13 @@ const TeacherViewAttendance = () => {
               </Text>
             </View>
           </View>
+
+          <TouchableOpacity
+            className="bg-black-100 px-20 py-4 rounded-lg mt-14"
+            onPress={() => router.back()}
+          >
+            <Text className="text-white text-md">Back</Text>
+          </TouchableOpacity>
         </>
       )}
 

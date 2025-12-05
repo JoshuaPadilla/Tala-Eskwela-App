@@ -12,6 +12,10 @@ interface AttendanceStoreState {
   getAttendanceByCurrentSchedule: (class_id: string, sched_id: string) => void;
   updateCurrentSchedAttendance: (attendance: Attendance) => void;
   getAttendance: (attendanceId: string) => Promise<Attendance | undefined>;
+  updateAttendance: (
+    attendanceId: string,
+    payload: Partial<Attendance>
+  ) => void;
 }
 
 export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
@@ -135,6 +139,29 @@ export const useAttendanceStore = create<AttendanceStoreState>((set) => ({
       }
 
       return undefined;
+    } catch (error) {
+      console.log("getCurrentSchedAttendance:", error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateAttendance: async (attendanceId, payload) => {
+    try {
+      set({ loading: true });
+
+      const accessToken = await AsyncStorage.getItem("accessToken");
+
+      const res = await fetch(`${BASE_URL}attendance/${attendanceId}`, {
+        method: "Patch",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
     } catch (error) {
       console.log("getCurrentSchedAttendance:", error);
     } finally {

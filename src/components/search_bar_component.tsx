@@ -7,12 +7,14 @@ interface SearchBarProps {
   onSubmit: (text: string) => void;
   placeHolderText?: string;
   additionalClassname?: string;
+  onChangeText?: (text: string) => void;
 }
 
 const SearchBarComponent = ({
   onSubmit,
   placeHolderText,
   additionalClassname,
+  onChangeText,
 }: SearchBarProps) => {
   const [value, setValue] = useState("");
 
@@ -36,6 +38,7 @@ const SearchBarComponent = ({
           value={value}
           onChangeText={(text) => {
             handleInputChange(text);
+            onChangeText && onChangeText(text);
           }}
           placeholder={placeHolderText}
           placeholderTextColor={"#fdba74"}

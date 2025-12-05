@@ -1,5 +1,6 @@
 import socket from "@/lib/socket";
 import ImageComponent from "@/src/components/image_component";
+import SearchBarComponent from "@/src/components/search_bar_component";
 import TeacherAttendanceComponent from "@/src/components/teacher_components/teacher_attendance_component";
 import { Icons } from "@/src/constants/icons/icons.constant";
 import {
@@ -13,7 +14,13 @@ import { useScheduleStore } from "@/src/stores/schedule.store";
 import { Image } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Keyboard,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ViewSchedule = () => {
@@ -29,6 +36,16 @@ const ViewSchedule = () => {
   const [selectedSched, setSelectedSched] = useState<Schedule | undefined>(
     undefined
   );
+
+  const [query, setQuery] = useState("");
+
+  const filteredStudents = query
+    ? currentSchedAttendance.filter((attendance) => {
+        return `${attendance.student.first_name} ${attendance.student.middle_name} ${attendance.student.last_name}`.includes(
+          query
+        );
+      })
+    : currentSchedAttendance;
 
   const totalStudents = teacherUser?.advisory_class.students?.length || 0;
   const totalPresent = currentSchedAttendance.length;
@@ -119,8 +136,14 @@ const ViewSchedule = () => {
               </View>
             </View>
 
-            {currentSchedAttendance.length > 0 ? (
-              currentSchedAttendance.map((att, idx) => (
+            <SearchBarComponent
+              onSubmit={() => Keyboard.dismiss()}
+              additionalClassname="mb-4"
+              onChangeText={setQuery}
+            />
+
+            {filteredStudents.length > 0 ? (
+              filteredStudents.map((att, idx) => (
                 <TeacherAttendanceComponent attendance={att} key={idx} />
               ))
             ) : (
